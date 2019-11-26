@@ -8,13 +8,13 @@ import java.util.List;
 
 @RestController
 public class UserController {
+
     @Autowired
     UserModel userModel;
 
     @GetMapping("/")
     public List findUsers()
     {
-        System.out.println("HERE");
 
         return userModel.findAll();
     }

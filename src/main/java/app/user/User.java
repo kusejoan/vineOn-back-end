@@ -6,19 +6,19 @@ import java.util.Objects;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user")
+@Table(name = "USERS")
 public class User implements Serializable {
     @Id @GeneratedValue
-    private Long id;
+    private Integer id;
 
-    @Column(name= "firstName")
+    @Column(name= "first_name")
     private String firstName;
 
-    @Column(name = "lastName")
+    @Column(name = "last_name")
     private String lastName;
 
     public User(){}
-    public User(Long id, String firstName, String lastName) {
+    public User(Integer id, String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -43,7 +43,7 @@ public class User implements Serializable {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

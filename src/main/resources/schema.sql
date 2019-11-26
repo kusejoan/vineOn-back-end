@@ -1,6 +1,6 @@
 
-CREATE TABLE user (
-  userId              SERIAL PRIMARY KEY,
-  firstName        VARCHAR(100),
-  lastName      VARCHAR(100)
-  )
+CREATE TABLE IF NOT EXISTS USERS (
+  id              SERIAL PRIMARY KEY,
+  first_name        VARCHAR(100),
+  last_name      VARCHAR(100)
+  );
