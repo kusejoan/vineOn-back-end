@@ -10,9 +10,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public class SecurityModelImpl implements SecurityModel{
-    @Autowired
+
+    public SecurityModelImpl(AuthenticationManager authenticationManager, UserDetailsService userDetailsService) {
+        this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
+    }
+
     private AuthenticationManager authenticationManager;
-    @Autowired
     private UserDetailsService userDetailsService;
 
     private static final Logger logger = LoggerFactory.getLogger(SecurityModelImpl.class);

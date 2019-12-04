@@ -10,8 +10,13 @@ import org.springframework.validation.Validator;
 
 @Component
 public class UserValidator implements Validator {
-    @Autowired
-    private UserModel userModel;
+
+    private final UserModel userModel;
+
+    public UserValidator(UserModel userModel)
+    {
+        this.userModel = userModel;
+    }
 
     @Override
     public boolean supports(Class<?> aClass) {

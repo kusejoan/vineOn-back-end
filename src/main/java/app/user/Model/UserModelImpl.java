@@ -13,11 +13,15 @@ import java.util.HashSet;
 
 @Service
 public class UserModelImpl implements UserModel {
-    @Autowired
+
+    public UserModelImpl(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder)
+    {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
     private UserRepository userRepository;
-    @Autowired
     private RoleRepository roleRepository;
-    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
