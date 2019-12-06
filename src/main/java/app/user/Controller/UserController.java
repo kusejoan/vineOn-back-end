@@ -4,17 +4,21 @@ import app.user.Entity.User;
 import app.user.Model.SecurityModel;
 import app.user.Model.UserModel;
 import app.user.validator.UserValidator;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+import java.util.List;
+
+@RestController
 public class UserController
 {
+    Logger logger = LoggerFactory.getLogger(UserController.class);
     public UserController(UserModel userModel, SecurityModel securityModel, UserValidator userValidator) {
         this.userModel = userModel;
         this.securityModel = securityModel;
@@ -26,25 +30,38 @@ public class UserController
     private UserValidator userValidator;
 
     @GetMapping("/registration")
-    public String registration(Model model) {
+    public User registration(Model model) {
         model.addAttribute("userForm", new User());
 
-        return "registration";
+        return new User();
+    }
+    @GetMapping("/list")
+    public List list() {
+
+        return userModel.findAll();
     }
 
-    @PostMapping("/registration")
-    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult) {
-        userValidator.validate(userForm, bindingResult);
+    @PostMapping("/register")
+    public User registration(String userJson) {
+        User userForm = new User();
+        try {
+            JSONObject jsonObject = new JSONObject(userJson);
+            String username = jsonObject.get("username").toString();
+            String password = jsonObject.get("password").toString();
+            String passwordConfirm = jsonObject.get("passwordConfirm").toString();
+            userForm.setPassword(password);
+            userForm.setUsername(username);
+            userForm.setPasswordConfirm(passwordConfirm);
 
-        if (bindingResult.hasErrors()) {
-            return "registration";
-        }
+            userModel.save(userForm);
 
-        userModel.save(userForm);
+            securityModel.autoLogin(userForm.getUsername(), userForm.getPasswordConfirm());
+        } catch (Exception ignored) {}
 
-        securityModel.autoLogin(userForm.getUsername(), userForm.getPasswordConfirm());
 
-        return "redirect:/welcome";
+
+
+        return userModel.findByUsername(userForm.getUsername());
     }
 
     @GetMapping("/login")
@@ -58,8 +75,8 @@ public class UserController
         return "login";
     }
 
-    @GetMapping({"/", "/welcome"})
-    public String welcome(Model model) {
-        return "welcome";
+    @GetMapping({"/welcome"})
+    public Model welcome(Model model) {
+        return model;
     }
 }
