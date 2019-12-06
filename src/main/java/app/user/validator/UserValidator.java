@@ -2,7 +2,6 @@ package app.user.validator;
 
 import app.user.Entity.User;
 import app.user.Model.UserModel;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -27,7 +26,7 @@ public class UserValidator implements Validator {
     public void validate(Object o, Errors errors) {
         User user = (User) o;
 
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "Username can't be empty");
         if (user.getUsername().length() < 6 || user.getUsername().length() > 32) {
             errors.reject("username", "Username must be between 6 and 32 characters");
         }
@@ -35,7 +34,7 @@ public class UserValidator implements Validator {
             errors.reject("username", "User already exists");
         }
 
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "Password can't be empty");
         if (user.getPassword().length() < 8 || user.getPassword().length() > 32) {
             errors.reject("password", "Password must be between 8 and 32 characters");
         }

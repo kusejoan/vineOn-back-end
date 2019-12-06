@@ -4,10 +4,7 @@ import app.user.Entity.User;
 import app.user.Model.SecurityModel;
 import app.user.Model.UserModel;
 import app.user.validator.UserValidator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,12 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 public class UserController
 {
-    Logger logger = LoggerFactory.getLogger(UserController.class);
     public UserController(UserModel userModel, SecurityModel securityModel, UserValidator userValidator) {
         this.userModel = userModel;
         this.securityModel = securityModel;
@@ -31,38 +25,26 @@ public class UserController
     private SecurityModel securityModel;
     private UserValidator userValidator;
 
-    @GetMapping("/registration")
-    public User registration(Model model) {
-        model.addAttribute("userForm", new User());
-
-        return new User();
-    }
-    @GetMapping("/list")
-    public List list() {
-
-        return userModel.findAll();
-    }
-
     class Status
     {
-        User user;
-        String output;
+        String user;
+        String message;
         Boolean success;
 
-        public User getUser() {
+        public String getUser() {
             return user;
         }
 
-        public void setUser(User user) {
+        public void setUser(String user) {
             this.user = user;
         }
 
-        public String getOutput() {
-            return output;
+        public String getMessage() {
+            return message;
         }
 
-        public void setOutput(String output) {
-            this.output = output;
+        public void setMessage(String message) {
+            this.message = message;
         }
         public Boolean getSuccess() {
             return success;
@@ -72,6 +54,23 @@ public class UserController
             this.success = success;
         }
     }
+
+    /*
+    EXPECTS JSON LIKE:
+    {
+        "username" : "username",
+        "password" : "PASSWORD",
+        "passwordConfirm" : "PASSWORD"
+    }
+
+    RETURNS JSON LIKE:
+    {
+    "user": user on whom action was performed
+    "message": message
+    "success": true/false
+    }
+
+     */
 
     @PostMapping("/register")
     public Status registration(@RequestBody String userJson) {
@@ -87,31 +86,45 @@ public class UserController
             userForm.setUsername(username);
             userForm.setPasswordConfirm(passwordConfirm);
 
-            Errors bind =  new BindException(userForm,"userForm");
+            Errors bind = new BindException(userForm,"userForm");
             userValidator.validate(userForm,bind);
 
             if(bind.hasErrors())
             {
-                ret.output = bind.getAllErrors().get(0).getDefaultMessage();
+                ret.message = bind.getAllErrors().get(0).getDefaultMessage();
                 ret.success = false;
                 return ret;
             }
 
             userModel.save(userForm);
 
-            securityModel.autoLogin(userForm.getUsername(), userForm.getPasswordConfirm());
-            ret.user = userForm;
-            ret.output = "Registration successful";
+            securityModel.Login(userForm.getUsername(), userForm.getPasswordConfirm());
+            ret.user = userForm.getUsername();
+            ret.message = "Registration successful";
             ret.success = true;
             return ret;
 
 
         } catch (Exception e) {
-            ret.output = e.toString();
+            ret.message = e.toString();
             return ret;
         }
     }
 
+
+    /*
+    EXPECTS JSON LIKE:
+    {
+        "username" : "username",
+        "password" : "PASSWORD",
+    }
+    RETURNS JSON LIKE:
+    {
+    "user": user on whom action was performed
+    "message": message
+    "success": true/false
+    }
+     */
     @PostMapping("/login")
     public Status login(@RequestBody String userJson) {
         User userForm = new User();
@@ -125,22 +138,72 @@ public class UserController
             userForm.setPassword(password);
             userForm.setUsername(username);
 
-            boolean logged = securityModel.autoLogin(userForm.getUsername(), userForm.getPassword());
+            boolean logged = securityModel.Login(userForm.getUsername(), userForm.getPassword());
 
             ret.success = logged;
-            ret.output = "Logged succesfully";
-            ret.user = userForm;
-            return ret;
+            ret.message = "Logged successfully";
+            ret.user = userForm.getUsername();
         } catch (Exception e) {
-            ret.output = e.getMessage();
+            ret.message = e.getMessage()+"ABC";
+            ret.success = false;
+        }
+
+        return ret;
+    }
+
+
+    /*
+    RETURNS JSON LIKE:
+    {
+        "user": user on whom action was performed
+        "message": message
+        "success": true/false
+    }
+     */
+    @PostMapping("/logout")
+    public Status logout()
+    {
+        Status ret = new Status();
+        try
+        {
+            securityModel.Logout();
+
+            ret.message ="Successfully logged out";
+            ret.success = true;
+            return ret;
+
+        }
+        catch (Exception e)
+        {
+            ret.message = e.getMessage();
             ret.success = false;
             return ret;
         }
 
     }
 
+    /*
+    RETURNS JSON LIKE:
+    {
+        "user": user on whom action was performed
+        "message": message
+        "success": true/false
+    }
+     */
     @GetMapping({"/welcome"})
-    public Model welcome(Model model) {
-        return model;
+    public Status welcome() {
+        Status ret = new Status();
+        String user = securityModel.findLoggedInUsername();
+        if (user!=null)
+        {
+            ret.user = user;
+            ret.success = true;
+        }
+        else
+        {
+
+            ret.success = false;
+        }
+        return ret;
     }
 }

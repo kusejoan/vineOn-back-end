@@ -1,8 +1,5 @@
 package app.user.Model;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,8 +16,6 @@ public class SecurityModelImpl implements SecurityModel{
     private AuthenticationManager authenticationManager;
     private UserDetailsService userDetailsService;
 
-    private static final Logger logger = LoggerFactory.getLogger(SecurityModelImpl.class);
-
     @Override
     public String findLoggedInUsername() {
         Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
@@ -32,7 +27,7 @@ public class SecurityModelImpl implements SecurityModel{
     }
 
     @Override
-    public boolean autoLogin(String username, String password) {
+    public boolean Login(String username, String password) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
 
@@ -40,10 +35,16 @@ public class SecurityModelImpl implements SecurityModel{
 
         if (usernamePasswordAuthenticationToken.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-            logger.debug(String.format("Auto login %s successfully!", username));
             return true;
         }
         else
             return false;
+    }
+
+    @Override
+    public void Logout()
+    {
+        SecurityContextHolder.clearContext();
+
     }
 }

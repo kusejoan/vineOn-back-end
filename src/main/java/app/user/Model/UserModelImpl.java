@@ -3,7 +3,6 @@ package app.user.Model;
 import app.user.Entity.User;
 import app.user.Repo.RoleRepository;
 import app.user.Repo.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
