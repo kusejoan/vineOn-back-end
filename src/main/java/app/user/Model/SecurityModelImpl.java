@@ -32,7 +32,7 @@ public class SecurityModelImpl implements SecurityModel{
     }
 
     @Override
-    public void autoLogin(String username, String password) {
+    public boolean autoLogin(String username, String password) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
 
@@ -41,7 +41,9 @@ public class SecurityModelImpl implements SecurityModel{
         if (usernamePasswordAuthenticationToken.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             logger.debug(String.format("Auto login %s successfully!", username));
+            return true;
         }
+        else
+            return false;
     }
-
 }

@@ -7,10 +7,12 @@ import app.user.validator.UserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindException;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -41,9 +43,41 @@ public class UserController
         return userModel.findAll();
     }
 
+    class Status
+    {
+        User user;
+        String output;
+        Boolean success;
+
+        public User getUser() {
+            return user;
+        }
+
+        public void setUser(User user) {
+            this.user = user;
+        }
+
+        public String getOutput() {
+            return output;
+        }
+
+        public void setOutput(String output) {
+            this.output = output;
+        }
+        public Boolean getSuccess() {
+            return success;
+        }
+
+        public void setSuccess(Boolean success) {
+            this.success = success;
+        }
+    }
+
     @PostMapping("/register")
-    public User registration(String userJson) {
+    public Status registration(@RequestBody String userJson) {
+
         User userForm = new User();
+        Status ret = new Status();
         try {
             JSONObject jsonObject = new JSONObject(userJson);
             String username = jsonObject.get("username").toString();
@@ -53,26 +87,56 @@ public class UserController
             userForm.setUsername(username);
             userForm.setPasswordConfirm(passwordConfirm);
 
+            Errors bind =  new BindException(userForm,"userForm");
+            userValidator.validate(userForm,bind);
+
+            if(bind.hasErrors())
+            {
+                ret.output = bind.getAllErrors().get(0).getDefaultMessage();
+                ret.success = false;
+                return ret;
+            }
+
             userModel.save(userForm);
 
             securityModel.autoLogin(userForm.getUsername(), userForm.getPasswordConfirm());
-        } catch (Exception ignored) {}
+            ret.user = userForm;
+            ret.output = "Registration successful";
+            ret.success = true;
+            return ret;
 
 
-
-
-        return userModel.findByUsername(userForm.getUsername());
+        } catch (Exception e) {
+            ret.output = e.toString();
+            return ret;
+        }
     }
 
-    @GetMapping("/login")
-    public String login(Model model, String error, String logout) {
-        if (error != null)
-            model.addAttribute("error", "Your username and password is invalid.");
+    @PostMapping("/login")
+    public Status login(@RequestBody String userJson) {
+        User userForm = new User();
+        Status ret = new Status();
 
-        if (logout != null)
-            model.addAttribute("message", "You have been logged out successfully.");
+        try {
+            JSONObject jsonObject = new JSONObject(userJson);
+            String username = jsonObject.get("username").toString();
+            String password = jsonObject.get("password").toString();
 
-        return "login";
+            userForm.setPassword(password);
+            userForm.setUsername(username);
+
+            boolean logged = securityModel.autoLogin(userForm.getUsername(), userForm.getPassword());
+
+            ret.success = logged;
+            ret.output = "Logged succesfully";
+            ret.user = userForm;
+            return ret;
+        } catch (Exception e) {
+            ret.output = e.getMessage();
+            ret.success = false;
+            return ret;
+        }
+
     }
 
     @GetMapping({"/welcome"})
