@@ -42,5 +42,9 @@ public class UserValidator implements Validator {
         if (!user.getPasswordConfirm().equals(user.getPassword())) {
             errors.reject("passwordConfirm", "Passwords are different");
         }
+        if (user.getRole()==null)
+        {
+            errors.reject("role", "Incorrect role name");
+        }
     }
 }

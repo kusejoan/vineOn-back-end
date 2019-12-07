@@ -1,5 +1,6 @@
 package app.user.validator;
 
+import app.user.Entity.Role;
 import app.user.Entity.User;
 import app.user.Model.UserModel;
 import org.junit.Test;
@@ -20,7 +21,9 @@ public class UserValidatorTest {
         u.setUsername("ProperUsername");
         u.setPassword("ProperPassword");
         u.setPasswordConfirm("ProperPassword");
-
+        Role r = new Role();
+        r.setName("regular");
+        u.setRole(r);
         Errors bind =  new BindException(u,"u");
         validator.validate(u,bind);
         assertEquals(0,bind.getErrorCount());
@@ -32,6 +35,9 @@ public class UserValidatorTest {
         u.setUsername("short");
         u.setPassword("ProperPassword");
         u.setPasswordConfirm("ProperPassword");
+        Role r = new Role();
+        r.setName("regular");
+        u.setRole(r);
 
         Errors bind =  new BindException(u,"u");
         validator.validate(u,bind);
@@ -48,6 +54,9 @@ public class UserValidatorTest {
         u.setUsername("ProperUsername");
         u.setPassword("short");
         u.setPasswordConfirm("short");
+        Role r = new Role();
+        r.setName("regular");
+        u.setRole(r);
 
         Errors bind =  new BindException(u,"u");
         validator.validate(u,bind);
@@ -62,6 +71,9 @@ public class UserValidatorTest {
         u.setUsername("ProperUsername");
         u.setPassword("ProperPassword");
         u.setPasswordConfirm("InProperPassword");
+        Role r = new Role();
+        r.setName("regular");
+        u.setRole(r);
 
         Errors bind =  new BindException(u,"u");
         validator.validate(u,bind);
@@ -76,6 +88,9 @@ public class UserValidatorTest {
         u.setUsername("short");
         u.setPassword("short");
         u.setPasswordConfirm("short1");
+        Role r = new Role();
+        r.setName("regular");
+        u.setRole(r);
 
         Errors bind =  new BindException(u,"u");
         validator.validate(u,bind);

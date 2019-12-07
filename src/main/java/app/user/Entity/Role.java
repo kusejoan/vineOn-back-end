@@ -10,9 +10,9 @@ public class Role {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 
+        @Column(name= "name")
         private String name;
-
-        @ManyToMany(mappedBy = "roles")
+        @OneToMany(mappedBy = "role")
         private Set<User> users;
 
         public Long getId() {

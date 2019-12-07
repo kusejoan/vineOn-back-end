@@ -7,17 +7,11 @@ import java.util.Set;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "USERS")
+@Table(name = "users")
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name= "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-    private String lastName;
 
     @Column(name = "user_name")
     private String username;
@@ -28,14 +22,12 @@ public class User implements Serializable {
     @Transient
     private String passwordConfirm;
 
-    @ManyToMany
-    private Set<Role> roles;
+    @ManyToOne()
+    private Role role;
 
     public User() {}
 
-    public User(String firstName, String lastName, String username, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public User(String username, String password) {
         this.username = username;
         this.password = password;
     }
@@ -48,21 +40,6 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 
     public String getUsername() {
         return username;
@@ -88,12 +65,12 @@ public class User implements Serializable {
         this.passwordConfirm = passwordConfirm;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @Override
@@ -102,14 +79,12 @@ public class User implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return Objects.equals(id, user.id) &&
-                Objects.equals(firstName, user.firstName) &&
-                Objects.equals(lastName, user.lastName) &&
                 Objects.equals(username, user.username) &&
                 Objects.equals(password, user.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, username, password);
+        return Objects.hash(id, username, password);
     }
 }
