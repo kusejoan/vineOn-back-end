@@ -35,6 +35,7 @@ public class UserController
     class Status
     {
         String user;
+
         String role;
         String message;
         Boolean success;
@@ -42,22 +43,27 @@ public class UserController
         public String getUser() {
             return user;
         }
-
         public void setUser(String user) {
             this.user = user;
+        }
+
+        public String getRole() {
+            return role;
+        }
+        public void setRole(String role) {
+            this.role = role;
         }
 
         public String getMessage() {
             return message;
         }
-
         public void setMessage(String message) {
             this.message = message;
         }
+
         public Boolean getSuccess() {
             return success;
         }
-
         public void setSuccess(Boolean success) {
             this.success = success;
         }
@@ -144,6 +150,7 @@ public class UserController
     RETURNS JSON LIKE:
     {
     "user": user on whom action was performed
+    "role": regular/shop
     "message": message
     "success": true/false
     }
@@ -166,6 +173,7 @@ public class UserController
             ret.success = logged;
             ret.message = "Logged successfully";
             ret.user = userForm.getUsername();
+            ret.role = userModel.findByUsername(username).getRole().getName();
         } catch (Exception e) {
             ret.message = e.getMessage();
             ret.success = false;
@@ -221,6 +229,7 @@ public class UserController
         {
             ret.user = user;
             ret.success = true;
+            ret.role = userModel.findByUsername(user).getRole().toString();
         }
         else
         {
