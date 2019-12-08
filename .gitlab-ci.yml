@@ -12,3 +12,4 @@ test:
   stage: test
   script:
     - mvn $MAVEN_CLI_OPTS test
+    - python3 test_runner.py

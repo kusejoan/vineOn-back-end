@@ -37,7 +37,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/user/regular/**").hasAuthority("regular")
                 .antMatchers("/api/user/shop/**").hasAuthority("shop")
                 .antMatchers("/api/user/**").authenticated()
-                .antMatchers("/resources/**", "/registration").permitAll()
+                .antMatchers("/api/resources/**", "/api/register", "/api/login", "/api/welcome","/api/").permitAll()
+                .antMatchers("/api/**").denyAll()
                 .anyRequest().permitAll()
                 .and()
                 .csrf().disable();

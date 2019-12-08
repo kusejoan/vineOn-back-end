@@ -5,16 +5,13 @@ import app.user.Model.RoleModel;
 import app.user.Model.SecurityModel;
 import app.user.Model.UserModel;
 import app.user.validator.UserValidator;
+import org.mapstruct.Mapping;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 public class UserController
@@ -87,11 +84,6 @@ public class UserController
     }
 
      */
-    @PostMapping("/users")
-    public String forbidden()
-    {
-        return "Access is forbidden";
-    }
 
     @PostMapping("/register")
     public Status registration(@RequestBody String userJson) {
@@ -191,7 +183,7 @@ public class UserController
         "success": true/false
     }
      */
-    @PostMapping("/logout")
+    @PostMapping("/user/logout")
     public Status logout()
     {
         Status ret = new Status();
@@ -217,23 +209,23 @@ public class UserController
     RETURNS JSON LIKE:
     {
         "user": user on whom action was performed
+        "role": user's role
         "message": message
         "success": true/false
     }
      */
-    @GetMapping({"/welcome"})
+    @PostMapping({"/welcome","/"})
     public Status welcome() {
         Status ret = new Status();
         String user = securityModel.findLoggedInUsername();
-        if (user!=null)
+        if (!user.equals("anonymousUser"))
         {
             ret.user = user;
             ret.success = true;
-            ret.role = userModel.findByUsername(user).getRole().toString();
+            ret.role = userModel.findByUsername(user).getRole().getName();
         }
         else
         {
-
             ret.success = false;
         }
         return ret;
