@@ -15,7 +15,16 @@ public class Role {
         @OneToMany(mappedBy = "role")
         private Set<User> users;
 
-        public Long getId() {
+        public Role(){
+
+        }
+
+        public Role(String name) {
+            this.name = name;
+        }
+
+
+    public Long getId() {
             return id;
         }
 

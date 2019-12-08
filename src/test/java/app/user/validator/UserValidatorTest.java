@@ -98,4 +98,27 @@ public class UserValidatorTest {
         assertEquals(3,bind.getErrorCount());
     }
 
+    @Test
+    public void invalidRolenameRaisesError()
+    {
+        User u = new User();
+        u.setUsername("ProperUsername");
+        u.setPassword("ProperPassword");
+        u.setPasswordConfirm("ProperPassword");
+        Role r = new Role();
+        r.setName("random");
+        u.setRole(r);
+
+        Errors bind = new BindException(u,"u");
+        validator.validate(u,bind);
+        assertEquals(1,bind.getErrorCount());
+        assertEquals("Incorrect role name",bind.getAllErrors().get(0).getDefaultMessage());
+    }
+
+    @Test
+    public void supportsUserClass()
+    {
+        assertEquals(true, validator.supports(User.class));
+    }
+
 }
