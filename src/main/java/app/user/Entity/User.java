@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.*;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
 public class User implements Serializable {
     @Id
@@ -35,6 +36,14 @@ public class User implements Serializable {
         this.username = username;
         this.password = password;
         this.role = new Role(role);
+    }
+
+    public User(User other)
+    {
+        this.username = other.username;
+        this.password = other.password;
+        this.passwordConfirm = other.passwordConfirm;
+        this.role = other.role;
     }
 
 
@@ -87,10 +96,5 @@ public class User implements Serializable {
         return Objects.equals(id, user.id) &&
                 Objects.equals(username, user.username) &&
                 Objects.equals(password, user.password);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, username, password);
     }
 }

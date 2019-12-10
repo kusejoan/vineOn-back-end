@@ -1,5 +1,7 @@
 package app.user.Controller;
 
+import app.user.Entity.Regular;
+import app.user.Entity.Store;
 import app.user.Entity.User;
 import app.user.Model.RoleModel;
 import app.user.Model.SecurityModel;
@@ -114,7 +116,14 @@ public class UserController
                 ret.success = false;
                 return ret;
             }
-
+            if(userForm.getRole().getName().equals("shop"))
+            {
+                userForm = new Store(userForm);
+            }
+            else
+            {
+                userForm = new Regular(userForm);
+            }
             userModel.save(userForm);
 
             securityModel.Login(userForm.getUsername(), userForm.getPasswordConfirm());
