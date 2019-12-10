@@ -22,6 +22,8 @@ def truncate_users():
     cursor = conn.cursor()
     cursor.execute("DELETE FROM Users")
     cursor.execute("ALTER SEQUENCE users_id_seq RESTART WITH 1")
+    cursor.execute("DELETE FROM Regular")
+    cursor.execute("DELETE FROM Store")
     conn.commit()
 
     return cursor
@@ -200,3 +202,4 @@ def test_user_permissions():
 
 
 
+test_basic_registration()

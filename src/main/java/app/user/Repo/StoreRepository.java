@@ -1,7 +1,7 @@
 package app.user.Repo;
 
-import app.user.Entity.User;
+import app.user.Entity.Store;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public interface UserRepository extends UserBaseRepository<User>  {}
+public interface StoreRepository extends UserBaseRepository<Store>  {}

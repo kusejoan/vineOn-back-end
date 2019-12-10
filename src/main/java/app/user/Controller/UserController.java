@@ -1,13 +1,12 @@
 package app.user.Controller;
 
-import app.user.Entity.Regular;
+import app.user.Entity.Customer;
 import app.user.Entity.Store;
 import app.user.Entity.User;
 import app.user.Model.RoleModel;
 import app.user.Model.SecurityModel;
 import app.user.Model.UserModel;
 import app.user.validator.UserValidator;
-import org.mapstruct.Mapping;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
@@ -122,7 +121,7 @@ public class UserController
             }
             else
             {
-                userForm = new Regular(userForm);
+                userForm = new Customer(userForm);
             }
             userModel.save(userForm);
 

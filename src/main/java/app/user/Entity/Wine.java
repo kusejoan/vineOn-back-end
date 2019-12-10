@@ -2,6 +2,7 @@ package app.user.Entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "wines")
@@ -18,10 +19,9 @@ public class Wine implements Serializable {
 
     @Column(name = "year")
     private Long year;
-/*
     @ManyToMany
     private Set<Store> shops;
-
+/*
     @ManyToMany
     private Set<WineGrade> grades;
 
