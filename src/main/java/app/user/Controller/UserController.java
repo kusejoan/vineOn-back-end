@@ -32,17 +32,17 @@ public class UserController
 
     class Status
     {
-        String user;
+        String username;
 
         String role;
         String message;
         Boolean success;
 
-        public String getUser() {
-            return user;
+        public String getUsername() {
+            return username;
         }
-        public void setUser(String user) {
-            this.user = user;
+        public void setUsername(String username) {
+            this.username = username;
         }
 
         public String getRole() {
@@ -73,13 +73,13 @@ public class UserController
         "username" : "username",
         "password" : "PASSWORD",
         "passwordConfirm" : "PASSWORD"
-        "role": user/shop
+        "role": username/shop
     }
 
     RETURNS JSON LIKE:
     {
-    "user": user on whom action was performed
-    "role": user/shop
+    "username": username on whom action was performed
+    "role": username/shop
     "message": message
     "success": true/false
     }
@@ -126,7 +126,7 @@ public class UserController
             userModel.save(userForm);
 
             securityModel.Login(userForm.getUsername(), userForm.getPasswordConfirm());
-            ret.user = userForm.getUsername();
+            ret.username = userForm.getUsername();
             ret.role = userForm.getRole().getName();
             ret.message = "Registration successful";
             ret.success = true;
@@ -149,7 +149,7 @@ public class UserController
     }
     RETURNS JSON LIKE:
     {
-    "user": user on whom action was performed
+    "username": username on whom action was performed
     "role": regular/shop
     "message": message
     "success": true/false
@@ -172,7 +172,7 @@ public class UserController
 
             ret.success = logged;
             ret.message = "Logged successfully";
-            ret.user = userForm.getUsername();
+            ret.username = userForm.getUsername();
             ret.role = userModel.findByUsername(username).getRole().getName();
         } catch (Exception e) {
             ret.message = e.getMessage();
@@ -186,7 +186,7 @@ public class UserController
     /*
     RETURNS JSON LIKE:
     {
-        "user": user on whom action was performed
+        "username": username on whom action was performed
         "message": message
         "success": true/false
     }
@@ -216,8 +216,8 @@ public class UserController
     /*
     RETURNS JSON LIKE:
     {
-        "user": user on whom action was performed
-        "role": user's role
+        "username": username on whom action was performed
+        "role": username's role
         "message": message
         "success": true/false
     }
@@ -228,7 +228,7 @@ public class UserController
         String user = securityModel.findLoggedInUsername();
         if (!user.equals("anonymousUser"))
         {
-            ret.user = user;
+            ret.username = user;
             ret.success = true;
             ret.role = userModel.findByUsername(user).getRole().getName();
         }

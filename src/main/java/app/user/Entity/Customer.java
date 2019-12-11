@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "regular")
+@Table(name = "customer")
 public class Customer extends User{
     public Customer() {}
 

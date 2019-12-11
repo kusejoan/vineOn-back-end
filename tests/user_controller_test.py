@@ -7,22 +7,22 @@ HTTP_FORBIDDEN = 403
 HTTP_NOT_FOUND = 404
 REGISTER_URL = 'http://localhost:8080/api/register'
 WELCOME_URL = 'http://localhost:8080/api/welcome'
-LOGOUT_URL = 'http://localhost:8080/api/user/logout'
+LOGOUT_URL = 'http://localhost:8080/api/username/logout'
 LOGIN_URL = 'http://localhost:8080/api/login'
 
-USER_ONLY_URL = 'http://localhost:8080/api/user/somerandompage'
-REGULAR_USER_ONLY_URL = "http://localhost:8080/api/user/regular/otherpage"
-SHOP_USER_ONLY_URL = "http://localhost:8080/api/user/shop/yetanotherpage"
+USER_ONLY_URL = 'http://localhost:8080/api/username/somerandompage'
+REGULAR_USER_ONLY_URL = "http://localhost:8080/api/username/regular/otherpage"
+SHOP_USER_ONLY_URL = "http://localhost:8080/api/username/shop/yetanotherpage"
 FORBIDDEN_URL = "http://localhost:8080/api/somerandomstuff"
 
 
 
 def truncate_users():
-    conn = psycopg2.connect(dbname="vineon", user="postgres", password="postgres")
+    conn = psycopg2.connect(dbname="vineon", username="postgres", password="postgres")
     cursor = conn.cursor()
     cursor.execute("DELETE FROM Users")
     cursor.execute("ALTER SEQUENCE users_id_seq RESTART WITH 1")
-    cursor.execute("DELETE FROM Regular")
+    cursor.execute("DELETE FROM Customer")
     cursor.execute("DELETE FROM Store")
     conn.commit()
 
@@ -38,18 +38,18 @@ def send_post_request(url, session, expected_code, payload=None):
 def test_basic_registration():
     """
     This test does the following
-    1) Register user
+    1) Register username
     2) Check if users is successfully registered into db
-    3) Try to register the same user again
-    4) Check that user wasn't registered because it already exists
-    5) Try to register new user but with invalid credentials (too short username)
-    6) Check that user wasn't registered because username is too short
+    3) Try to register the same username again
+    4) Check that username wasn't registered because it already exists
+    5) Try to register new username but with invalid credentials (too short username)
+    6) Check that username wasn't registered because username is too short
     """
     cursor = truncate_users()
     session = requests.Session()
 
     username = "sampleUsername"
-    role = "regular"
+    role = "customer"
 
     payload = {
         "username": username,
@@ -62,23 +62,23 @@ def test_basic_registration():
 
     # Validate
     assert resp_body['success'] is True
-    assert resp_body['user'] == username
+    assert resp_body['username'] == username
     assert resp_body['role'] == role
     cursor.execute("SELECT COUNT (*) from users")
     count = cursor.fetchone()[0]
     assert count == 1
 
-    # second attempt of adding the same user
+    # second attempt of adding the same username
     resp_body = send_post_request(REGISTER_URL, session, HTTP_OK, payload)
 
     assert resp_body['success'] is False
-    assert resp_body['user'] is None
+    assert resp_body['username'] is None
     assert resp_body['message'] == 'User already exists'
     cursor.execute("SELECT COUNT (*) from users")
     count = cursor.fetchone()[0]
     assert count == 1
 
-    # invalid credentials user
+    # invalid credentials username
     payload = {
         "username": "short",
         "password": "PASSWORD",
@@ -88,7 +88,7 @@ def test_basic_registration():
     resp_body = send_post_request(REGISTER_URL, session, HTTP_OK, payload)
 
     assert resp_body['success'] is False
-    assert resp_body['user'] is None
+    assert resp_body['username'] is None
     assert resp_body['message'] == "Username must be between 6 and 32 characters"
     truncate_users()
 
@@ -96,19 +96,19 @@ def test_basic_registration():
 def test_registration_logout_and_login():
     """
     This test does the following:
-    1) Register new user
-    2) Check if user is logged
-    3) Logout user
-    4) Check if no user is logged
+    1) Register new username
+    2) Check if username is logged
+    3) Logout username
+    4) Check if no username is logged
     5) Login into previously registered account
-    6) Check if user is logged again
+    6) Check if username is logged again
 
     """
     truncate_users()
     session = requests.Session()
 
     username = "sampleUsername"
-    role = "regular"
+    role = "customer"
     register_payload = {
         "username": username,
         "password": "PASSWORD",
@@ -120,7 +120,7 @@ def test_registration_logout_and_login():
 
     welcome_resp = send_post_request(WELCOME_URL, session, HTTP_OK)
 
-    assert welcome_resp['user'] == username
+    assert welcome_resp['username'] == username
     assert welcome_resp['success'] is True
 
     logout_resp = send_post_request(LOGOUT_URL, session, HTTP_OK)
@@ -137,12 +137,12 @@ def test_registration_logout_and_login():
 
     login_resp = send_post_request(LOGIN_URL, session, HTTP_OK, login_payload)
 
-    assert login_resp['user'] == username
+    assert login_resp['username'] == username
     assert login_resp['success'] is True
 
     welcome_resp = send_post_request(WELCOME_URL, session, HTTP_OK)
 
-    assert welcome_resp['user'] == username
+    assert welcome_resp['username'] == username
     assert welcome_resp['success'] is True
 
 

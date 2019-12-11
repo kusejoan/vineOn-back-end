@@ -22,7 +22,7 @@ public class UserValidatorTest {
         u.setPassword("ProperPassword");
         u.setPasswordConfirm("ProperPassword");
         Role r = new Role();
-        r.setName("regular");
+        r.setName("customer");
         u.setRole(r);
         Errors bind =  new BindException(u,"u");
         validator.validate(u,bind);
@@ -36,7 +36,7 @@ public class UserValidatorTest {
         u.setPassword("ProperPassword");
         u.setPasswordConfirm("ProperPassword");
         Role r = new Role();
-        r.setName("regular");
+        r.setName("customer");
         u.setRole(r);
 
         Errors bind =  new BindException(u,"u");
@@ -55,7 +55,7 @@ public class UserValidatorTest {
         u.setPassword("short");
         u.setPasswordConfirm("short");
         Role r = new Role();
-        r.setName("regular");
+        r.setName("customer");
         u.setRole(r);
 
         Errors bind =  new BindException(u,"u");
@@ -72,7 +72,7 @@ public class UserValidatorTest {
         u.setPassword("ProperPassword");
         u.setPasswordConfirm("InProperPassword");
         Role r = new Role();
-        r.setName("regular");
+        r.setName("customer");
         u.setRole(r);
 
         Errors bind =  new BindException(u,"u");
@@ -89,7 +89,7 @@ public class UserValidatorTest {
         u.setPassword("short");
         u.setPasswordConfirm("short1");
         Role r = new Role();
-        r.setName("regular");
+        r.setName("customer");
         u.setRole(r);
 
         Errors bind =  new BindException(u,"u");
