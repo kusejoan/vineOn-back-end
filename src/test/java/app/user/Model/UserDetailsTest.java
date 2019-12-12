@@ -16,7 +16,7 @@ public class UserDetailsTest {
     @Test
     public void CheckIfPermissionsAreGrantedProperlyForRightUser()
     {
-        String role = "regular";
+        String role = "customer";
         String username = "ABC";
         String password = "PASS";
         User u = new User(username,password,role);

@@ -12,7 +12,7 @@ public class RoleModelTest {
     @Test
     public void checkRoleName()
     {
-        roleModel.getRoleByName("regular");
-        verify(roleRepository,times(1)).findByName("regular");
+        roleModel.getRoleByName("customer");
+        verify(roleRepository,times(1)).findByName("customer");
     }
 }

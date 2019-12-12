@@ -77,7 +77,7 @@ public class UserController
     RETURNS JSON LIKE:
     {
     "username": username on whom action was performed
-    "role": username/shop
+    "role": customer/store
     "message": message
     "success": true/false
     }
@@ -148,7 +148,7 @@ public class UserController
     RETURNS JSON LIKE:
     {
     "username": username on whom action was performed
-    "role": regular/shop
+    "role": customer/store
     "message": message
     "success": true/false
     }

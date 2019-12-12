@@ -11,7 +11,7 @@ LOGOUT_URL = 'http://localhost:8080/api/user/logout'
 LOGIN_URL = 'http://localhost:8080/api/login'
 
 USER_ONLY_URL = 'http://localhost:8080/api/user/somerandompage'
-REGULAR_USER_ONLY_URL = "http://localhost:8080/api/user/regular/otherpage"
+REGULAR_USER_ONLY_URL = "http://localhost:8080/api/user/customer/otherpage"
 SHOP_USER_ONLY_URL = "http://localhost:8080/api/user/store/yetanotherpage"
 FORBIDDEN_URL = "http://localhost:8080/api/somerandomstuff"
 
