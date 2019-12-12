@@ -1,7 +1,8 @@
 package app.user.validator;
 
 import app.user.Entity.User;
-import app.user.Model.UserModel;
+import app.user.Model.User.UserModel;
+import org.mapstruct.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -12,9 +13,9 @@ public class UserValidator implements Validator {
 
     private final UserModel userModel;
 
-    public UserValidator(UserModel userModel)
+    public UserValidator(UserModel userModelImpl)
     {
-        this.userModel = userModel;
+        this.userModel = userModelImpl;
     }
 
     @Override
@@ -42,7 +43,7 @@ public class UserValidator implements Validator {
         if (!user.getPasswordConfirm().equals(user.getPassword())) {
             errors.reject("passwordConfirm", "Passwords are different");
         }
-        if (!user.getRole().getName().equals("customer") && !user.getRole().getName().equals("shop"))
+        if (!user.getRole().getName().equals("customer") && !user.getRole().getName().equals("store"))
         {
             errors.reject("role", "Incorrect role name");
         }

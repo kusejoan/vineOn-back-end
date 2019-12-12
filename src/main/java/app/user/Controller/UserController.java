@@ -1,11 +1,9 @@
 package app.user.Controller;
 
-import app.user.Entity.Customer;
-import app.user.Entity.Store;
-import app.user.Entity.User;
+import app.user.Entity.*;
 import app.user.Model.RoleModel;
 import app.user.Model.SecurityModel;
-import app.user.Model.UserModel;
+import app.user.Model.User.UserModel;
 import app.user.validator.UserValidator;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.validation.BindException;
@@ -17,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class UserController
 {
-    public UserController(UserModel userModel, SecurityModel securityModel,
+    public UserController(UserModel userModelImpl, SecurityModel securityModel,
                           UserValidator userValidator, RoleModel roleModel) {
-        this.userModel = userModel;
+        this.userModel = userModelImpl;
         this.securityModel = securityModel;
         this.userValidator = userValidator;
         this.roleModel = roleModel;
@@ -73,7 +71,7 @@ public class UserController
         "username" : "username",
         "password" : "PASSWORD",
         "passwordConfirm" : "PASSWORD"
-        "role": username/shop
+        "role": customer/store
     }
 
     RETURNS JSON LIKE:
@@ -115,7 +113,7 @@ public class UserController
                 ret.success = false;
                 return ret;
             }
-            if(userForm.getRole().getName().equals("shop"))
+            if(userForm.getRole().getName().equals("store"))
             {
                 userForm = new Store(userForm);
             }

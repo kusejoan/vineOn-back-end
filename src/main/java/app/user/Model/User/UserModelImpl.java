@@ -1,4 +1,4 @@
-package app.user.Model;
+package app.user.Model.User;
 
 import app.user.Entity.User;
 import app.user.Repo.UserRepository;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserModelImpl implements UserModel {
+public class UserModelImpl implements UserModel<User> {
 
     public UserModelImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder)
     {

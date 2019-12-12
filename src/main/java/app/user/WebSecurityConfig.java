@@ -2,7 +2,7 @@ package app.user;
 
 import app.user.Model.SecurityModel;
 import app.user.Model.SecurityModelImpl;
-import app.user.Model.UserDetailsImpl;
+import app.user.Model.User.UserDetailsImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/api/user/regular/**").hasAuthority("customer")
-                .antMatchers("/api/user/shop/**").hasAuthority("shop")
+                .antMatchers("/api/user/store/**").hasAuthority("store")
                 .antMatchers("/api/user/**").authenticated()
                 .antMatchers("/api/resources/**", "/api/register", "/api/login", "/api/welcome","/api/").permitAll()
                 .antMatchers("/api/**").denyAll()

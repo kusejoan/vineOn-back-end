@@ -1,6 +1,7 @@
 package app.user.Model;
 
 import app.user.Entity.User;
+import app.user.Model.User.UserDetailsImpl;
 import app.user.Repo.UserRepository;
 import org.junit.Test;
 import org.springframework.security.core.userdetails.UserDetailsService;

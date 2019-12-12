@@ -2,7 +2,7 @@ package app.user.validator;
 
 import app.user.Entity.Role;
 import app.user.Entity.User;
-import app.user.Model.UserModel;
+import app.user.Model.User.UserModel;
 import org.junit.Test;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;

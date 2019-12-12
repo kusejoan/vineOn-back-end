@@ -1,7 +1,8 @@
 package app.user.Model;
 
 import app.user.Entity.User;
-import app.user.Repo.RoleRepository;
+import app.user.Model.User.UserModel;
+import app.user.Model.User.UserModelImpl;
 import app.user.Repo.UserRepository;
 import org.junit.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

@@ -7,18 +7,18 @@ HTTP_FORBIDDEN = 403
 HTTP_NOT_FOUND = 404
 REGISTER_URL = 'http://localhost:8080/api/register'
 WELCOME_URL = 'http://localhost:8080/api/welcome'
-LOGOUT_URL = 'http://localhost:8080/api/username/logout'
+LOGOUT_URL = 'http://localhost:8080/api/user/logout'
 LOGIN_URL = 'http://localhost:8080/api/login'
 
-USER_ONLY_URL = 'http://localhost:8080/api/username/somerandompage'
-REGULAR_USER_ONLY_URL = "http://localhost:8080/api/username/regular/otherpage"
-SHOP_USER_ONLY_URL = "http://localhost:8080/api/username/shop/yetanotherpage"
+USER_ONLY_URL = 'http://localhost:8080/api/user/somerandompage'
+REGULAR_USER_ONLY_URL = "http://localhost:8080/api/user/regular/otherpage"
+SHOP_USER_ONLY_URL = "http://localhost:8080/api/user/store/yetanotherpage"
 FORBIDDEN_URL = "http://localhost:8080/api/somerandomstuff"
 
 
 
 def truncate_users():
-    conn = psycopg2.connect(dbname="vineon", username="postgres", password="postgres")
+    conn = psycopg2.connect(dbname="vineon", user="postgres", password="postgres")
     cursor = conn.cursor()
     cursor.execute("DELETE FROM Users")
     cursor.execute("ALTER SEQUENCE users_id_seq RESTART WITH 1")
@@ -90,6 +90,7 @@ def test_basic_registration():
     assert resp_body['success'] is False
     assert resp_body['username'] is None
     assert resp_body['message'] == "Username must be between 6 and 32 characters"
+
     truncate_users()
 
 
@@ -145,6 +146,8 @@ def test_registration_logout_and_login():
     assert welcome_resp['username'] == username
     assert welcome_resp['success'] is True
 
+    truncate_users()
+
 
 def test_user_permissions():
     cursor = truncate_users()
@@ -154,7 +157,7 @@ def test_user_permissions():
         "username": "regularUser",
         "password": "PASSWORD",
         "passwordConfirm": "PASSWORD",
-        "role": "regular"
+        "role": "customer"
     }
     send_post_request(REGISTER_URL, session, HTTP_OK, register_payload)
     send_post_request(LOGOUT_URL, session, HTTP_OK)
@@ -163,7 +166,7 @@ def test_user_permissions():
         "username": "shopUser",
         "password": "PASSWORD",
         "passwordConfirm": "PASSWORD",
-        "role": "shop"
+        "role": "store"
     }
     send_post_request(REGISTER_URL, session, HTTP_OK, register_payload)
     send_post_request(LOGOUT_URL, session, HTTP_OK)
@@ -199,6 +202,7 @@ def test_user_permissions():
     send_post_request(LOGOUT_URL, session, HTTP_OK)
 
     send_post_request(FORBIDDEN_URL,session,HTTP_FORBIDDEN)
+    truncate_users()
 
 
 
