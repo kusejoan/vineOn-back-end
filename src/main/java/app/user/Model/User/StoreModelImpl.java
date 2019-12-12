@@ -1,6 +1,7 @@
 package app.user.Model.User;
 
 import app.user.Entity.Store;
+import app.user.Entity.Wine;
 import app.user.Repo.StoreRepository;
 import org.springframework.stereotype.Service;
 
@@ -38,5 +39,10 @@ public class StoreModelImpl implements StoreModel {
     public Store findByUsername(String username)
     {
         return storeRepository.findByUsername(username);
+    }
+
+    public void addWine(Store store, Wine wine)
+    {
+        store.addWine(wine);
     }
 }

@@ -1,6 +1,7 @@
 package app.user.Controller;
 
 import app.user.Entity.Store;
+import app.user.Entity.Wine;
 import app.user.Model.SecurityModel;
 import app.user.Model.User.StoreModel;
 import org.springframework.boot.configurationprocessor.json.JSONException;
@@ -51,10 +52,20 @@ public class StoreController  {
     EXPECTS JSON LIKE (ONLY FIELDS THAT NEED TO BE MODIFIED)
 
     {
-    "address": address,
-    "city":  city,
-    "country": country,
-    "website": website
+    "address": value,
+    "city":  value,
+    "country": value,
+    "website": value,
+    }
+
+    RETURNS JSON LIKE
+    {
+    "storeName": value
+    "address": value,
+    "city":  value,
+    "country": value,
+    "website": value,
+    "success": true/false
     }
 
      */
@@ -93,17 +104,30 @@ public class StoreController  {
             return new StoreInfo();
         }
     }
+
+
     /*
     EXPECTS JSON LIKE
     {
         'city' : city
     }
 
-    RETURNS
+    RETURNS JSON LIKE
 
+    [
+        {
+        "storeName": value
+        "address": value,
+        "city":  value,
+        "country": value,
+        "website": value,
+        "success": true/false
+        }
+        ...
+
+    ]
 
      */
-
     @PostMapping("/user/storesofcity")
     public List getStoresOfCity(@RequestBody String cityJSON)
     {
@@ -134,6 +158,38 @@ public class StoreController  {
         }
         return ret;
     }
+
+    @PostMapping("/user/store/addwine")
+    public String addWine(@RequestBody String wineJSON)
+    {
+        //Todo
+        //JsonRead
+        Wine test = new Wine();
+        test.setId(new Long(1));
+        test.setName("TESTWINE");
+        //CheckIfExists - if not add to DB
+
+        //insertIntoDB
+        String username = securityModel.findLoggedInUsername();
+        Store store = storeModel.findByUsername(username);
+        store.addWine(test);
+        storeModel.save(store);
+        return "ABC";
+    }
+
+    @PostMapping("/user/store/removewine")
+    public String removeWine(@RequestBody String wineJSON)
+    {
+        Wine test = new Wine();
+        test.setId(new Long(1));
+        String username = securityModel.findLoggedInUsername();
+        Store store = storeModel.findByUsername(username);
+
+        Boolean result = store.removeWine(test);
+        storeModel.save(store);
+        return "ABC" + store.getWines().size();
+    }
+
 
 
 

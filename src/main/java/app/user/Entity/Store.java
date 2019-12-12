@@ -3,6 +3,7 @@ package app.user.Entity;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "store")
@@ -29,6 +30,9 @@ public class Store extends User {
 
         @Column(name = "website")
         private String website;
+
+    @ManyToMany
+        private Set<Wine> wines;
 
 
     public String getStore_name() {
@@ -69,6 +73,24 @@ public class Store extends User {
 
     public void setWebsite(String webside) {
         this.website = webside;
+    }
+
+    public Set<Wine> getWines() {
+        return wines;
+    }
+
+    public void setWines(Set<Wine> wines) {
+        this.wines = wines;
+    }
+
+    public boolean addWine(Wine wine)
+    {
+       return wines.add(wine);
+    }
+
+    public boolean removeWine(Wine wine)
+    {
+        return wines.remove(wine);
     }
 
     @Override
