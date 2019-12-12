@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface StoreModel extends UserModel<Store> {
     List findAll();
 
-    List findStoresOfCity(String city);
+    List<Store> findStoresOfCity(String city);
 
     Optional<Store> findById(Long id);
 

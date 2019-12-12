@@ -21,7 +21,7 @@ public class StoreModelImpl implements StoreModel {
     }
 
     @Override
-    public List findStoresOfCity(String city) {
+    public List<Store> findStoresOfCity(String city) {
         return storeRepository.findByCity(city);
     }
 

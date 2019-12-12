@@ -2,7 +2,6 @@ package app.user.Entity;
 
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
@@ -16,20 +15,20 @@ public class Store extends User {
         super(other);
     }
 
-    @Column(name = "store_name")
-    private String store_name;
+        @Column(name = "store_name")
+        private String store_name;
 
-    @Column(name = "address")
-    private String address;
+        @Column(name = "address")
+        private String address;
 
-    @Column(name = "city")
-    private String city;
+        @Column(name = "city")
+        private String city;
 
-    @Column(name = "country")
-    private String country;
+        @Column(name = "country")
+        private String country;
 
-    @Column(name = "webside")
-    private String webside;
+        @Column(name = "website")
+        private String website;
 
 
     public String getStore_name() {
@@ -64,12 +63,12 @@ public class Store extends User {
         this.country = country;
     }
 
-    public String getWebside() {
-        return webside;
+    public String getWebsite() {
+        return website;
     }
 
-    public void setWebside(String webside) {
-        this.webside = webside;
+    public void setWebsite(String webside) {
+        this.website = webside;
     }
 
     @Override
@@ -82,11 +81,11 @@ public class Store extends User {
                 Objects.equals(address, store.address) &&
                 Objects.equals(city, store.city) &&
                 Objects.equals(country, store.country) &&
-                Objects.equals(webside, store.webside);
+                Objects.equals(website, store.website);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(store_name, address, city, country, webside);
+        return Objects.hash(store_name, address, city, country, website);
     }
 }

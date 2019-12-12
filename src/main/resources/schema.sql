@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS STORE(
   address           VARCHAR(100),
   city              VARCHAR(100),
   country           VARCHAR(100),
-  webside           VARCHAR(100)
+  website           VARCHAR(100)
 );
 
 CREATE TABLE IF NOT EXISTS WINES(
