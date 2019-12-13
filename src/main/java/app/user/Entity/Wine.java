@@ -20,6 +20,13 @@ public class Wine implements Serializable {
 
     @Column(name = "year")
     private Long year;
+
+    @Column(name = "color")
+    private String color;
+
+    @Column(name = "type")
+    private String type;
+
     @ManyToMany(mappedBy = "wines")
     private Set<Store> store;
 
@@ -55,6 +62,22 @@ public class Wine implements Serializable {
         this.year = year;
     }
 
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public Set<Store> getStore() {
         return store;
     }
@@ -71,13 +94,11 @@ public class Wine implements Serializable {
         return Objects.equals(id, wine.id) &&
                 Objects.equals(name, wine.name) &&
                 Objects.equals(country, wine.country) &&
-                Objects.equals(year, wine.year);
+                Objects.equals(year, wine.year) &&
+                Objects.equals(color, wine.color) &&
+                Objects.equals(type, wine.type);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, country, year);
-    }
 
     /*
     @ManyToMany

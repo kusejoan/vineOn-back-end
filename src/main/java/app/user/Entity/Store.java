@@ -2,6 +2,7 @@ package app.user.Entity;
 
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -9,7 +10,9 @@ import java.util.Set;
 @Table(name = "store")
 public class Store extends User {
 
-    public Store() {}
+    public Store() {
+        wines = new HashSet<>();
+    }
 
     public Store(User other)
     {
@@ -17,7 +20,7 @@ public class Store extends User {
     }
 
         @Column(name = "store_name")
-        private String store_name;
+        private String storeName;
 
         @Column(name = "address")
         private String address;
@@ -35,12 +38,12 @@ public class Store extends User {
         private Set<Wine> wines;
 
 
-    public String getStore_name() {
-        return store_name;
+    public String getStoreName() {
+        return storeName;
     }
 
-    public void setStore_name(String store_name) {
-        this.store_name = store_name;
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 
     public String getAddress() {
@@ -71,8 +74,8 @@ public class Store extends User {
         return website;
     }
 
-    public void setWebsite(String webside) {
-        this.website = webside;
+    public void setWebsite(String website) {
+        this.website = website;
     }
 
     public Set<Wine> getWines() {
@@ -99,7 +102,7 @@ public class Store extends User {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Store store = (Store) o;
-        return Objects.equals(store_name, store.store_name) &&
+        return Objects.equals(storeName, store.storeName) &&
                 Objects.equals(address, store.address) &&
                 Objects.equals(city, store.city) &&
                 Objects.equals(country, store.country) &&
@@ -108,6 +111,6 @@ public class Store extends User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(store_name, address, city, country, website);
+        return Objects.hash(storeName, address, city, country, website);
     }
 }

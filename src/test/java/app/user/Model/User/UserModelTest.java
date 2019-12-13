@@ -1,4 +1,4 @@
-package app.user.Model;
+package app.user.Model.User;
 
 import app.user.Entity.User;
 import app.user.Model.User.UserModel;

@@ -12,6 +12,7 @@ public interface StoreModel extends UserModel<Store> {
     List<Store> findStoresOfCity(String city);
 
     Optional<Store> findById(Long id);
+    Optional<Store> findByStorename(String storeName);
 
     Store findByUsername(String username);
     void addWine(Store store, Wine wine);

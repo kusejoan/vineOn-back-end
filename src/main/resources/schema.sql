@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS CUSTOMER(
 
 CREATE TABLE IF NOT EXISTS STORE(
   id                SERIAL PRIMARY KEY,
-  store_name        VARCHAR(100),
+  store_name        VARCHAR(100) UNIQUE,
   address           VARCHAR(100),
   city              VARCHAR(100),
   country           VARCHAR(100),
@@ -33,6 +33,8 @@ CREATE TABLE IF NOT EXISTS WINES(
   id         SERIAL PRIMARY KEY,
   name       VARCHAR(100),
   country    VARCHAR(100),
+  color      VARCHAR(100),
+  type       VARCHAR(100),
   year       INT,
 
   description       TEXT

@@ -55,9 +55,4 @@ public class Customer extends User{
                 Objects.equals(surname, customer.surname) &&
                 Objects.equals(birth_date, customer.birth_date);
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(first_name, surname, birth_date);
-    }
 }

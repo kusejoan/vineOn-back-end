@@ -30,6 +30,10 @@ public class StoreModelImpl implements StoreModel {
     {
         return storeRepository.findById(id);
     }
+    public Optional<Store> findByStorename(String storeName)
+    {
+        return storeRepository.findByStoreName(storeName);
+    }
 
     @Override
     public void save(Store user) {
