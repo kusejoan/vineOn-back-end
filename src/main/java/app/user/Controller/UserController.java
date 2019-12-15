@@ -28,42 +28,6 @@ public class UserController
     private UserValidator userValidator;
     private RoleModel roleModel;
 
-    class Status
-    {
-        String username;
-
-        String role;
-        String message;
-        Boolean success;
-
-        public String getUsername() {
-            return username;
-        }
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public String getRole() {
-            return role;
-        }
-        public void setRole(String role) {
-            this.role = role;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-        public void setMessage(String message) {
-            this.message = message;
-        }
-
-        public Boolean getSuccess() {
-            return success;
-        }
-        public void setSuccess(Boolean success) {
-            this.success = success;
-        }
-    }
 
     /*
     EXPECTS JSON LIKE:
@@ -85,10 +49,10 @@ public class UserController
      */
 
     @PostMapping("/register")
-    public Status registration(@RequestBody String userJson) {
+    public UserReturn registration(@RequestBody String userJson) {
 
         User userForm = new User();
-        Status ret = new Status();
+        UserReturn ret = new UserReturn();
         try {
             JSONObject jsonObject = new JSONObject(userJson);
             String username = jsonObject.get("username").toString();
@@ -132,7 +96,7 @@ public class UserController
 
 
         } catch (Exception e) {
-            e.printStackTrace();
+            ret.success = false;
             ret.message = e.toString();
             return ret;
         }
@@ -154,9 +118,9 @@ public class UserController
     }
      */
     @PostMapping("/login")
-    public Status login(@RequestBody String userJson) {
+    public UserReturn login(@RequestBody String userJson) {
         User userForm = new User();
-        Status ret = new Status();
+        UserReturn ret = new UserReturn();
 
         try {
             JSONObject jsonObject = new JSONObject(userJson);
@@ -190,25 +154,14 @@ public class UserController
     }
      */
     @PostMapping("/user/logout")
-    public Status logout()
+    public UserReturn logout()
     {
-        Status ret = new Status();
-        try
-        {
+        UserReturn ret = new UserReturn();
             securityModel.Logout();
 
             ret.message ="Successfully logged out";
             ret.success = true;
             return ret;
-
-        }
-        catch (Exception e)
-        {
-            ret.message = e.getMessage();
-            ret.success = false;
-            return ret;
-        }
-
     }
 
     /*
@@ -221,8 +174,8 @@ public class UserController
     }
      */
     @PostMapping({"/welcome","/"})
-    public Status welcome() {
-        Status ret = new Status();
+    public UserReturn welcome() {
+        UserReturn ret = new UserReturn();
         String user = securityModel.findLoggedInUsername();
         if (!user.equals("anonymousUser"))
         {
