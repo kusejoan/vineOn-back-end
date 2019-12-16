@@ -1,5 +1,7 @@
 package app.user.Controller;
 
+import app.user.Controller.helpers.StoreReturn;
+import app.user.Controller.helpers.WineReturn;
 import app.user.Entity.Store;
 import app.user.Entity.Wine;
 import app.user.Model.SecurityModel;
@@ -49,7 +51,7 @@ public class StoreController  {
      */
 
     @PostMapping("/user/store/update")
-    public StoreInfo UpdateProfile(@RequestBody String profileJSON)
+    public StoreReturn UpdateProfile(@RequestBody String profileJSON)
     {
         String name = securityModel.findLoggedInUsername();
         Store profile = storeModel.findByUsername(name);
@@ -79,11 +81,11 @@ public class StoreController  {
 
 
             storeModel.save(profile);
-            return new StoreInfo(profile);
+            return new StoreReturn(profile);
         }
         catch (Exception e)
         {
-            return new StoreInfo();
+            return new StoreReturn();
         }
     }
 
@@ -113,7 +115,7 @@ public class StoreController  {
     @PostMapping("/user/storesofcity")
     public List getStoresOfCity(@RequestBody String cityJSON)
     {
-        List<StoreInfo> ret = new ArrayList<>();
+        List<StoreReturn> ret = new ArrayList<>();
         String city;
         try
         {
@@ -129,14 +131,14 @@ public class StoreController  {
         }
         catch (Exception e)
         {
-         StoreInfo fail = new StoreInfo();
+         StoreReturn fail = new StoreReturn();
          ret.add(fail);
          return ret;
         }
         List<Store> stores = storeModel.findStoresOfCity(city);
         for(Store s: stores)
         {
-            ret.add(new StoreInfo(s));
+            ret.add(new StoreReturn(s));
         }
         return ret;
     }
@@ -222,7 +224,7 @@ public class StoreController  {
             else
             {
                 ret.success = false;
-                ret.message = "Couldn't remove "+wine.getName()+store.getStoreName();
+                ret.message = "Couldn't remove "+wine.getName()+" from "+store.getStoreName();
             }
             return ret;
         }

@@ -1,15 +1,15 @@
-package app.user.Controller;
+package app.user.Controller.helpers;
 
 import app.user.Entity.Store;
 
-public class StoreInfo
+public class StoreReturn
 {
-    StoreInfo()
+    public StoreReturn()
     {
         success = false;
     }
 
-    StoreInfo(Store store)
+    public StoreReturn(Store store)
     {
         storeName = store.getStoreName();
         address = store.getAddress();
@@ -18,12 +18,12 @@ public class StoreInfo
         website = store.getWebsite();
         success = true;
     }
-    String storeName;
-    String address;
-    String city;
-    String country;
-    String website;
-    boolean success;
+    public String storeName;
+    public String address;
+    public String city;
+    public String country;
+    public String website;
+    public boolean success;
 
     public String getStoreName() {
         return storeName;

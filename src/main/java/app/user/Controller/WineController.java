@@ -1,5 +1,7 @@
 package app.user.Controller;
 
+import app.user.Controller.helpers.StoreReturn;
+import app.user.Controller.helpers.WineReturn;
 import app.user.Entity.Store;
 import app.user.Entity.Wine;
 import app.user.Model.User.StoreModel;
@@ -17,6 +19,12 @@ import java.util.List;
 public class WineController {
     private WineModel wineModel;
     private StoreModel storeModel;
+
+    public WineController(WineModel wineModel, StoreModel storeModel)
+    {
+        this.wineModel = wineModel;
+        this.storeModel = storeModel;
+    }
 
     /*
     REQUESTS JSON LIKE
@@ -108,9 +116,9 @@ public class WineController {
 
      */
     @PostMapping("/user/storesofwine")
-    public List<StoreInfo> getStoresOfWine(@RequestBody String wineJSON)
+    public List<StoreReturn> getStoresOfWine(@RequestBody String wineJSON)
     {
-        List<StoreInfo> ret = new ArrayList<>();
+        List<StoreReturn> ret = new ArrayList<>();
         try
         {
             String wineName;
@@ -137,7 +145,7 @@ public class WineController {
 
             for(Store s: stores)
             {
-                ret.add(new StoreInfo(s));
+                ret.add(new StoreReturn(s));
             }
 
             return ret;
@@ -145,7 +153,7 @@ public class WineController {
         }
         catch(Exception e)
         {
-            StoreInfo fail = new StoreInfo();
+            StoreReturn fail = new StoreReturn();
             ret.add(fail);
             return ret;
         }

@@ -1,12 +1,12 @@
-package app.user.Controller;
+package app.user.Controller.helpers;
 
 public class UserReturn
 {
-    String username;
+    public String username;
 
-    String role;
-    String message;
-    Boolean success;
+    public String role;
+    public String message;
+    public Boolean success;
 
     public String getUsername() {
         return username;

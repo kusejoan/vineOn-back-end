@@ -1,8 +1,10 @@
 package app.user.Controller;
 
+import app.user.Controller.helpers.UserReturn;
 import app.user.Entity.Role;
 import app.user.Entity.Store;
 import app.user.Entity.Customer;
+import app.user.Entity.User;
 import app.user.Model.RoleModel;
 import app.user.Model.SecurityModel;
 import app.user.Model.User.UserModel;
@@ -99,6 +101,56 @@ public class UserControllerTest {
     }
 
     //LOGIN
+
+    @Test
+    public void checkIfDataIsSentFurtherOnProperLogin() throws Exception {
+
+        when(roleModel.getRoleByName("store")).thenReturn(new Role("store"));
+        when(securityModel.Login(anyString(),anyString())).thenReturn(true);
+        when(userModel.findByUsername(anyString())).thenReturn(new User("test","test","test"));
+
+        String loginJson =
+                "{\n" +
+                        "\t\"username\": \"user1234\",\n" +
+                        "\t\"password\": \"password\"\n" +
+                        "}";
+        UserReturn userReturn = userController.login(loginJson);
+
+        assertEquals(userReturn.message,"Logged successfully");
+        assertEquals(userReturn.success,true);
+        assertEquals(userReturn.role,"test");
+    }
+
+    @Test
+    public void checkIfDataIsntSentOnException()
+    {
+        String loginJson =
+                "{\n" +
+                        "\t\"username\": \"user1234\",\n" +
+                        "\t\"passwordd\": \"password\"\n" +
+                        "}";
+
+        UserReturn userReturn = userController.login(loginJson);
+
+        assertEquals(userReturn.message,"No value for password");
+        assertEquals(userReturn.success,false);
+        assertNull(userReturn.role);
+        assertNull(userReturn.username);
+    }
+
+    //WELCOME
+
+    @Test
+    public void welcomesUserIfUserIsLoggedIn()
+    {
+        when(securityModel.findLoggedInUsername()).thenReturn("test_user");
+        when(userModel.findByUsername("test_user")).thenReturn(new User("test_user","pass","role"));
+        UserReturn userReturn = userController.welcome();
+
+        assertEquals(userReturn.username, "test_user");
+        assertEquals(userReturn.success, true);
+        assertEquals(userReturn.role,"role");
+    }
 
 
     //LOGOUT

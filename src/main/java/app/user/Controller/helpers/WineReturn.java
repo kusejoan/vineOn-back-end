@@ -1,9 +1,9 @@
-package app.user.Controller;
+package app.user.Controller.helpers;
 
-class WineReturn
+public class WineReturn
 {
-    boolean success;
-    String message;
+    public boolean success;
+    public String message;
 
     public boolean isSuccess() {
         return success;

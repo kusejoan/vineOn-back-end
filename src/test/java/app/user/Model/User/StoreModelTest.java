@@ -41,7 +41,7 @@ public class StoreModelTest {
     @Test
     public void checkIfWinesAreProperlyAddedToStore()
     {
-        Store s = new Store();;
+        Store s = new Store();
         Wine w  = new Wine();
         w.setName("ABC");
 
