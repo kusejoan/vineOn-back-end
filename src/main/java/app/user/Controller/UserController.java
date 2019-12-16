@@ -55,10 +55,10 @@ public class UserController
         UserReturn ret = new UserReturn();
         try {
             JSONObject jsonObject = new JSONObject(userJson);
-            String username = jsonObject.getJSONObject("params").get("username").toString();
-            String password = jsonObject.getJSONObject("params").get("password").toString();
-            String passwordConfirm = jsonObject.getJSONObject("params").get("passwordConfirm").toString();
-            String role = jsonObject.getJSONObject("params").get("role").toString();
+            String username = jsonObject.get("username").toString();
+            String password = jsonObject.get("password").toString();
+            String passwordConfirm = jsonObject.get("passwordConfirm").toString();
+            String role = jsonObject.get("role").toString();
             userForm.setPassword(password);
             userForm.setUsername(username);
             userForm.setPasswordConfirm(passwordConfirm);
