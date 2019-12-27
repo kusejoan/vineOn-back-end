@@ -52,11 +52,11 @@ public class WineController {
         {
             JSONObject jsonObject = new JSONObject(wineJSON);
             Wine wine = new Wine();
-            wine.setName(jsonObject.getString("wineName"));
-            wine.setCountry(jsonObject.getString("country"));
-            wine.setYear(jsonObject.getLong("year"));
-            wine.setColor(jsonObject.getString("color"));
-            wine.setType(jsonObject.getString("type"));
+            wine.setName(jsonObject.getJSONObject("params").getString("wineName"));
+            wine.setCountry(jsonObject.getJSONObject("params").getString("country"));
+            wine.setYear(jsonObject.getJSONObject("params").getLong("year"));
+            wine.setColor(jsonObject.getJSONObject("params").getString("color"));
+            wine.setType(jsonObject.getJSONObject("params").getString("type"));
 
             wineModel.save(wine);
 
@@ -124,9 +124,9 @@ public class WineController {
             String wineName;
             Wine wine;
             JSONObject jsonObject = new JSONObject(wineJSON);
-            if(jsonObject.has("storeName"))
+            if(jsonObject.getJSONObject("params").has("storeName"))
             {
-                wineName = jsonObject.getString("wineName");
+                wineName = jsonObject.getJSONObject("params").getString("wineName");
             }
             else
             {

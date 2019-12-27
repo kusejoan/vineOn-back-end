@@ -58,25 +58,25 @@ public class StoreController  {
         try {
 
             JSONObject jsonObject = new JSONObject(profileJSON);
-            if(jsonObject.has("storeName"))
+            if(jsonObject.getJSONObject("params").has("storeName"))
             {
-                profile.setStoreName(jsonObject.getString("storeName"));
+                profile.setStoreName(jsonObject.getJSONObject("params").getString("storeName"));
             }
-            if(jsonObject.has("address"))
+            if(jsonObject.getJSONObject("params").has("address"))
             {
-                profile.setAddress(jsonObject.getString("address"));
+                profile.setAddress(jsonObject.getJSONObject("params").getString("address"));
             }
-            if(jsonObject.has("city"))
+            if(jsonObject.getJSONObject("params").has("city"))
             {
-                profile.setCity(jsonObject.getString("city"));
+                profile.setCity(jsonObject.getJSONObject("params").getString("city"));
             }
-            if(jsonObject.has("country"))
+            if(jsonObject.getJSONObject("params").has("country"))
             {
-                profile.setCountry(jsonObject.getString("country"));
+                profile.setCountry(jsonObject.getJSONObject("params").getString("country"));
             }
-            if(jsonObject.has("website"))
+            if(jsonObject.getJSONObject("params").has("website"))
             {
-                profile.setWebsite(jsonObject.getString("website"));
+                profile.setWebsite(jsonObject.getJSONObject("params").getString("website"));
             }
 
 
@@ -120,9 +120,9 @@ public class StoreController  {
         try
         {
             JSONObject jsonObject = new JSONObject(cityJSON);
-            if(jsonObject.has("city"))
+            if(jsonObject.getJSONObject("params").has("city"))
             {
-                city = jsonObject.getString("city");
+                city = jsonObject.getJSONObject("params").getString("city");
             }
             else
             {
@@ -254,9 +254,9 @@ public class StoreController  {
             String storeName;
             Store store;
             JSONObject jsonObject = new JSONObject(storeJSON);
-            if(jsonObject.has("storeName"))
+            if(jsonObject.getJSONObject("params").has("storeName"))
             {
-                storeName = jsonObject.getString("storeName");
+                storeName = jsonObject.getJSONObject("params").getString("storeName");
             }
             else
             {
@@ -294,9 +294,9 @@ public class StoreController  {
         String wineName;
         Wine wine;
 
-        if(jsonObject.has("wineName"))
+        if(jsonObject.getJSONObject("params").has("wineName"))
         {
-            wineName = jsonObject.getString("wineName");
+            wineName = jsonObject.getJSONObject("params").getString("wineName");
         }
         else
         {

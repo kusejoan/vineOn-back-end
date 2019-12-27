@@ -125,8 +125,8 @@ public class UserController
 
         try {
             JSONObject jsonObject = new JSONObject(userJson);
-            String username = jsonObject.get("username").toString();
-            String password = jsonObject.get("password").toString();
+            String username = jsonObject.getJSONObject("params").get("username").toString();
+            String password = jsonObject.getJSONObject("params").get("password").toString();
 
             userForm.setPassword(password);
             userForm.setUsername(username);
