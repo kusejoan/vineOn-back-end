@@ -1,7 +1,6 @@
 package app.user.Controller;
 
-import app.user.Controller.helpers.StoreReturn;
-import app.user.Controller.helpers.WineReturn;
+import app.user.Controller.helpers.*;
 import app.user.Entity.Store;
 import app.user.Entity.Wine;
 import app.user.Model.SecurityModel;
@@ -57,26 +56,26 @@ public class StoreController  {
         Store profile = storeModel.findByUsername(name);
         try {
 
-            JSONObject jsonObject = new JSONObject(profileJSON);
-            if(jsonObject.getJSONObject("params").has("storeName"))
+            JSONObject jsonObject = JSONGetter.getParams(profileJSON);
+            if(jsonObject.has("storeName"))
             {
-                profile.setStoreName(jsonObject.getJSONObject("params").getString("storeName"));
+                profile.setStoreName(jsonObject.getString("storeName"));
             }
-            if(jsonObject.getJSONObject("params").has("address"))
+            if(jsonObject.has("address"))
             {
-                profile.setAddress(jsonObject.getJSONObject("params").getString("address"));
+                profile.setAddress(jsonObject.getString("address"));
             }
-            if(jsonObject.getJSONObject("params").has("city"))
+            if(jsonObject.has("city"))
             {
-                profile.setCity(jsonObject.getJSONObject("params").getString("city"));
+                profile.setCity(jsonObject.getString("city"));
             }
-            if(jsonObject.getJSONObject("params").has("country"))
+            if(jsonObject.has("country"))
             {
-                profile.setCountry(jsonObject.getJSONObject("params").getString("country"));
+                profile.setCountry(jsonObject.getString("country"));
             }
-            if(jsonObject.getJSONObject("params").has("website"))
+            if(jsonObject.has("website"))
             {
-                profile.setWebsite(jsonObject.getJSONObject("params").getString("website"));
+                profile.setWebsite(jsonObject.getString("website"));
             }
 
 
@@ -113,16 +112,17 @@ public class StoreController  {
 
      */
     @PostMapping("/user/storesofcity")
-    public List getStoresOfCity(@RequestBody String cityJSON)
+    public MultipleStoresReturn getStoresOfCity(@RequestBody String cityJSON)
     {
-        List<StoreReturn> ret = new ArrayList<>();
+        MultipleStoresReturn ret = new MultipleStoresReturn();
+        List<StoreReturn> tmp = new ArrayList<>();
         String city;
         try
         {
-            JSONObject jsonObject = new JSONObject(cityJSON);
-            if(jsonObject.getJSONObject("params").has("city"))
+            JSONObject jsonObject = JSONGetter.getParams(cityJSON);
+            if(jsonObject.has("city"))
             {
-                city = jsonObject.getJSONObject("params").getString("city");
+                city = jsonObject.getString("city");
             }
             else
             {
@@ -131,15 +131,16 @@ public class StoreController  {
         }
         catch (Exception e)
         {
-         StoreReturn fail = new StoreReturn();
-         ret.add(fail);
+         ret.setSuccess(false);
          return ret;
         }
         List<Store> stores = storeModel.findStoresOfCity(city);
         for(Store s: stores)
         {
-            ret.add(new StoreReturn(s));
+            tmp.add(new StoreReturn(s));
         }
+        ret.setStores(tmp);
+        ret.setSuccess(true);
         return ret;
     }
 
@@ -242,21 +243,26 @@ public class StoreController  {
     "storeName": storeName
     }
 
-    RETURNS LIST OF WINES on success / null on error
+    RETURNS LIST OF WINES
+    wines: [
+
+    ]
+    success:
 
      */
     @PostMapping("/user/winesofstore")
-    public List<Wine> winesOfStore(@RequestBody String storeJSON)
+    public MultipleWinesReturn winesOfStore(@RequestBody String storeJSON)
     {
+        MultipleWinesReturn ret = new MultipleWinesReturn();
 
         try
         {
             String storeName;
             Store store;
-            JSONObject jsonObject = new JSONObject(storeJSON);
-            if(jsonObject.getJSONObject("params").has("storeName"))
+            JSONObject jsonObject = JSONGetter.getParams(storeJSON);
+            if(jsonObject.has("storeName"))
             {
-                storeName = jsonObject.getJSONObject("params").getString("storeName");
+                storeName = jsonObject.getString("storeName");
             }
             else
             {
@@ -277,26 +283,29 @@ public class StoreController  {
             {
                 w.setStore(null); //prevent infinite recursion
             }
+            ret.setWines(wines);
+            ret.setSuccess(true);
 
-            return wines;
+            return ret;
 
         }
         catch(Exception e)
         {
-            return null;
+            ret.setSuccess(false);
+            return ret;
         }
 
     }
 
     private Wine getWineFromJSON(String wineJSON) throws Exception
     {
-        JSONObject jsonObject = new JSONObject(wineJSON);
+        JSONObject jsonObject = JSONGetter.getParams(wineJSON);
         String wineName;
         Wine wine;
 
-        if(jsonObject.getJSONObject("params").has("wineName"))
+        if(jsonObject.has("wineName"))
         {
-            wineName = jsonObject.getJSONObject("params").getString("wineName");
+            wineName = jsonObject.getString("wineName");
         }
         else
         {

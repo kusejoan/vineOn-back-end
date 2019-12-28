@@ -1,5 +1,6 @@
 package app.user.Controller;
 
+import app.user.Controller.helpers.JSONGetter;
 import app.user.Controller.helpers.UserReturn;
 import app.user.Entity.*;
 import app.user.Model.RoleModel;
@@ -55,7 +56,7 @@ public class UserController
         User userForm = new User();
         UserReturn ret = new UserReturn();
         try {
-            JSONObject jsonObject = new JSONObject(userJson);
+            JSONObject jsonObject = JSONGetter.getParams(userJson);
             String username = jsonObject.get("username").toString();
             String password = jsonObject.get("password").toString();
             String passwordConfirm = jsonObject.get("passwordConfirm").toString();
@@ -124,9 +125,9 @@ public class UserController
         UserReturn ret = new UserReturn();
 
         try {
-            JSONObject jsonObject = new JSONObject(userJson);
-            String username = jsonObject.getJSONObject("params").get("username").toString();
-            String password = jsonObject.getJSONObject("params").get("password").toString();
+            JSONObject jsonObject = JSONGetter.getParams(userJson);
+            String username = jsonObject.get("username").toString();
+            String password = jsonObject.get("password").toString();
 
             userForm.setPassword(password);
             userForm.setUsername(username);

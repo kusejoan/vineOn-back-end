@@ -33,9 +33,9 @@ public class StoreControllerTest {
         when(storeModel.findByUsername(anyString())).thenReturn(test);
         when(securityModel.findLoggedInUsername()).thenReturn("username");
         when(wineModel.findByName(anyString())).thenReturn(Optional.of(testWine));
-        String wineJSON = "{\n" +
+        String wineJSON = "{ params: {\n" +
                 "    \"wineName\": \"wino1\"\n" +
-                "}";
+                "} }";
 
         WineReturn wineReturn = storeController.addWine(wineJSON);
 
@@ -55,9 +55,9 @@ public class StoreControllerTest {
         when(storeModel.findByUsername(anyString())).thenReturn(test);
         when(securityModel.findLoggedInUsername()).thenReturn("username");
         when(wineModel.findByName(anyString())).thenReturn(Optional.empty());
-        String wineJSON = "{\n" +
+        String wineJSON = "{ params: {\n" +
                 "    \"wineName\": \"wino1\"\n" +
-                "}";
+                "} } ";
 
         WineReturn wineReturn = storeController.addWine(wineJSON);
 
@@ -77,9 +77,9 @@ public class StoreControllerTest {
         when(storeModel.findByUsername(anyString())).thenReturn(test);
         when(securityModel.findLoggedInUsername()).thenReturn("username");
         when(wineModel.findByName(anyString())).thenReturn(Optional.of(testWine));
-        String wineJSON = "{\n" +
+        String wineJSON = "{\n params:\n {\n" +
                 "    \"wineName\": \"wino1\"\n" +
-                "}";
+                "} }";
         WineReturn wineReturn = storeController.removeWine(wineJSON);
 
         assertEquals(wineReturn.success,false);
@@ -99,9 +99,9 @@ public class StoreControllerTest {
         when(storeModel.findByUsername(anyString())).thenReturn(test);
         when(securityModel.findLoggedInUsername()).thenReturn("username");
         when(wineModel.findByName(anyString())).thenReturn(Optional.of(testWine));
-        String wineJSON = "{\n" +
+        String wineJSON = "{ params: {\n" +
                 "    \"wineName\": \"wino1\"\n" +
-                "}";
+                "} }";
         WineReturn wineReturn = storeController.removeWine(wineJSON);
 
         assertEquals(wineReturn.success,true);
@@ -117,13 +117,13 @@ public class StoreControllerTest {
         String city = "Krakow";
         String country = "Polska";
         String website = "www.sklep.pl";
-        String profileJSON = "{\n" +
+        String profileJSON = "{ params: {\n" +
                 "    \"storeName\": \"sklep\",\n" +
                 "    \"address\": \""+address+"\",\n" +
                 "    \"city\": \""+city+"\",\n" +
                 "    \"country\": \""+country+"\",\n" +
                 "    \"website\": \""+website+"\"\n" +
-                "}";
+                "} }";
         StoreReturn storeReturn = storeController.UpdateProfile(profileJSON);
 
         assertEquals(storeReturn.address,address);

@@ -12,18 +12,18 @@ public class WineControllerTest {
     private WineModel wineModel = mock(WineModel.class);
     private StoreModel storeModel = mock(StoreModel.class);
 
-    private WineController wineController = new WineController(wineModel,storeModel);
+    private WineController wineController = new WineController(wineModel);
 
     @Test
     public void wineDataIsSentFurther()
     {
-        String wineJSON = "{\n" +
+        String wineJSON = "{ params: {\n" +
                 "    \"wineName\": \"wino1\",\n" +
                 "    \"country\": Polska,\n" +
                 "    \"year\": 1998,\n" +
                 "    \"color\": \"red\",\n" +
                 "    \"type\": \"sweet\"\n" +
-                "}";
+                "} }";
         WineReturn wineReturn = wineController.add(wineJSON);
 
         assertEquals(wineReturn.success, true);
@@ -32,21 +32,16 @@ public class WineControllerTest {
     @Test
     public void wineDataIsNotSentFurtherIfIncorrect()
     {
-        String wineJSON = "{\n" +
+        String wineJSON = "{ params: {\n" +
                 "    \"wineName\": \"wino1\",\n" +
                 "    \"country\": Polska,\n" +
                 "    \"color\": \"red\",\n" +
                 "    \"type\": \"sweet\"\n" +
-                "}";
+                "} }";
 
         WineReturn wineReturn = wineController.add(wineJSON);
 
         assertEquals(wineReturn.success,false);
         assertEquals(wineReturn.message,"No value for year");
-    }
-    @Test
-    public void findAllWinesCallsRightMethodsAndPreventsInfiniteRecursion()
-    {
-
     }
 }

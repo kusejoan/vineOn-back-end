@@ -33,20 +33,20 @@ public class UserControllerTest {
         when(roleModel.getRoleByName("store")).thenReturn(new Role("store"));
         when(roleModel.getRoleByName("customer")).thenReturn(new Role("customer"));
         String registerJsonStore =
-                "{\n" +
+                "{ params: {\n" +
                 "\t\"username\": \"user1234\",\n" +
                 "\t\"password\": \"password\",\n" +
                 "\t\"passwordConfirm\": \"password\",\n" +
                 "\t\"role\": \"store\"\n" +
-                "}";
+                "} } ";
 
         String registerJsonCustomer =
-                "{\n" +
+                "{ params: {\n" +
                         "\t\"username\": \"user123\",\n" +
                         "\t\"password\": \"password\",\n" +
                         "\t\"passwordConfirm\": \"password\",\n" +
                         "\t\"role\": \"customer\"\n" +
-                        "}";
+                        "} }";
         UserReturn retStore = userController.registration(registerJsonStore);
 
         assertEquals(retStore.username,"user1234");
@@ -72,12 +72,12 @@ public class UserControllerTest {
         when(roleModel.getRoleByName("invalid")).thenReturn(new Role("invalid"));
 
         String registerJsonStore =
-                "{\n" +
+                "{ params: {\n" +
                         "\t\"username\": \"user1234\",\n" +
                         "\t\"password\": \"password\",\n" +
                         "\t\"passwordConfirm\": \"password\",\n" +
                         "\t\"role\": \"invalid\"\n" +
-                        "}";
+                        "} } ";
         UserReturn userReturn = userController.registration(registerJsonStore);
 
         assertEquals(userReturn.success, false);
@@ -89,9 +89,9 @@ public class UserControllerTest {
     public void CheckIfExceptionIsProperlyHeldWhenJSONIsIncorrect()
     {
         String registerJson =
-                "{\n" +
+                "{ params: {\n" +
                         "\t\"username\": \"user1234\"\n" +
-                        "}";
+                        "} }";
 
         UserReturn userReturn = userController.registration(registerJson);
 
@@ -110,10 +110,10 @@ public class UserControllerTest {
         when(userModel.findByUsername(anyString())).thenReturn(new User("test","test","test"));
 
         String loginJson =
-                "{\n" +
+                "{ params: {\n" +
                         "\t\"username\": \"user1234\",\n" +
                         "\t\"password\": \"password\"\n" +
-                        "}";
+                        "} } ";
         UserReturn userReturn = userController.login(loginJson);
 
         assertEquals(userReturn.message,"Logged successfully");
@@ -125,10 +125,10 @@ public class UserControllerTest {
     public void checkIfDataIsntSentOnException()
     {
         String loginJson =
-                "{\n" +
+                "{ params: {\n" +
                         "\t\"username\": \"user1234\",\n" +
                         "\t\"passwordd\": \"password\"\n" +
-                        "}";
+                        "} } ";
 
         UserReturn userReturn = userController.login(loginJson);
 

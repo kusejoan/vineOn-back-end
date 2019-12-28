@@ -1,10 +1,8 @@
 package app.user.Controller;
 
-import app.user.Controller.helpers.StoreReturn;
-import app.user.Controller.helpers.WineReturn;
+import app.user.Controller.helpers.*;
 import app.user.Entity.Store;
 import app.user.Entity.Wine;
-import app.user.Model.User.StoreModel;
 import app.user.Model.WineModel;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
@@ -18,12 +16,10 @@ import java.util.List;
 @RestController
 public class WineController {
     private WineModel wineModel;
-    private StoreModel storeModel;
 
-    public WineController(WineModel wineModel, StoreModel storeModel)
+    public WineController(WineModel wineModel)
     {
         this.wineModel = wineModel;
-        this.storeModel = storeModel;
     }
 
     /*
@@ -50,13 +46,13 @@ public class WineController {
         WineReturn ret = new WineReturn();
         try
         {
-            JSONObject jsonObject = new JSONObject(wineJSON);
+            JSONObject jsonObject = JSONGetter.getParams(wineJSON);
             Wine wine = new Wine();
-            wine.setName(jsonObject.getJSONObject("params").getString("wineName"));
-            wine.setCountry(jsonObject.getJSONObject("params").getString("country"));
-            wine.setYear(jsonObject.getJSONObject("params").getLong("year"));
-            wine.setColor(jsonObject.getJSONObject("params").getString("color"));
-            wine.setType(jsonObject.getJSONObject("params").getString("type"));
+            wine.setName(jsonObject.getString("wineName"));
+            wine.setCountry(jsonObject.getString("country"));
+            wine.setYear(jsonObject.getLong("year"));
+            wine.setColor(jsonObject.getString("color"));
+            wine.setType(jsonObject.getString("type"));
 
             wineModel.save(wine);
 
@@ -81,8 +77,9 @@ public class WineController {
 
      */
     @PostMapping("/user/getAllWines")
-    public List<Wine> getAllWines()
+    public MultipleWinesReturn getAllWines()
     {
+
         List<Wine> wines =  new ArrayList<>(wineModel.findAll());
 
         for(Wine w: wines)
@@ -90,7 +87,7 @@ public class WineController {
             w.setStore(null); //prevent infinite recursion
         }
 
-        return wines;
+        return new MultipleWinesReturn(wines);
     }
 
     /*
@@ -101,7 +98,7 @@ public class WineController {
 
     RETURNS JSON LIKE
 
-    [
+   wines: [
         {
         "storeName": value
         "address": value,
@@ -113,24 +110,27 @@ public class WineController {
         ...
 
     ]
+    status:
 
      */
     @PostMapping("/user/storesofwine")
-    public List<StoreReturn> getStoresOfWine(@RequestBody String wineJSON)
+    public MultipleStoresReturn getStoresOfWine(@RequestBody String wineJSON)
     {
-        List<StoreReturn> ret = new ArrayList<>();
+        MultipleStoresReturn ret = new MultipleStoresReturn();
+
         try
         {
+            List<StoreReturn> tmp = new ArrayList<>();
             String wineName;
             Wine wine;
-            JSONObject jsonObject = new JSONObject(wineJSON);
-            if(jsonObject.getJSONObject("params").has("storeName"))
+            JSONObject jsonObject = JSONGetter.getParams(wineJSON);
+            if(jsonObject.has("wineName"))
             {
-                wineName = jsonObject.getJSONObject("params").getString("wineName");
+                wineName = jsonObject.getString("wineName");
             }
             else
             {
-                throw new JSONException("JSON must contain field storeName");
+                throw new JSONException("JSON must contain field wineName");
             }
             if(wineModel.findByName(wineName).isPresent())
             {
@@ -145,16 +145,17 @@ public class WineController {
 
             for(Store s: stores)
             {
-                ret.add(new StoreReturn(s));
+                tmp.add(new StoreReturn(s));
             }
+            ret.setStores(tmp);
+            ret.setSuccess(true);
 
             return ret;
 
         }
         catch(Exception e)
         {
-            StoreReturn fail = new StoreReturn();
-            ret.add(fail);
+            ret.setSuccess(false);
             return ret;
         }
     }
