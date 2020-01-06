@@ -54,6 +54,12 @@ public class WineController {
             wine.setColor(jsonObject.getString("color"));
             wine.setType(jsonObject.getString("type"));
 
+            if(wineModel.findByName(wine.getName()).isPresent())
+            {
+                ret.success = false;
+                ret.message = "Wine "+wine.getName()+" already is in database";
+                return ret;
+            }
             wineModel.save(wine);
 
             ret.success = true;

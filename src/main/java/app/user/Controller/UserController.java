@@ -31,25 +31,28 @@ public class UserController
     private RoleModel roleModel;
 
 
-    /*
-    EXPECTS JSON LIKE:
-    {
-        "username" : "username",
-        "password" : "PASSWORD",
-        "passwordConfirm" : "PASSWORD"
-        "role": customer/store
-    }
-
-    RETURNS JSON LIKE:
-    {
-    "username": username on whom action was performed
-    "role": customer/store
-    "message": message
-    "success": true/false
-    }
-
+    /**
+     * This method is responsible for user's registration. It checks if username and passwords
+     * are of proper length, if password is properly confirmed and if this username is not taken.
+     *
+     * If all these conditions are met user is added to database and simultaneously logged in.
+     *
+     * Information whether registration was successful or not is returned
+     * @param userJson
+     * {
+     *         "username",
+     *         "password",
+     *         "passwordConfirm"
+     *         "role": customer/store
+     * }
+     * @return
+     * {
+     *     "username": username on whom action was performed
+     *     "role": customer/store
+     *     "message"
+     *     "success": true/false
+     *     }
      */
-
     @PostMapping("/register")
     public UserReturn registration(@RequestBody String userJson) {
 
@@ -104,20 +107,23 @@ public class UserController
         }
     }
 
-
-    /*
-    EXPECTS JSON LIKE:
-    {
-        "username" : "username",
-        "password" : "PASSWORD",
-    }
-    RETURNS JSON LIKE:
-    {
-    "username": username on whom action was performed
-    "role": customer/store
-    "message": message
-    "success": true/false
-    }
+    /**
+     * This method is responsible for logging in user who was previously registered.
+     * It checks if login and password are proper and if so logs user in.
+     *
+     * Information whether login was successful or not is returned
+     * @param userJson
+     * {
+     *         "username",
+     *         "password"
+     * }
+     * @return
+     * {
+     *     "username": username on whom action was performed,
+     *     "role": customer/store,
+     *     "message",
+     *     "success": true/false
+     * }
      */
     @PostMapping("/login")
     public UserReturn login(@RequestBody String userJson) {
@@ -146,34 +152,37 @@ public class UserController
         return ret;
     }
 
-
-    /*
-    RETURNS JSON LIKE:
-    {
-        "username": username on whom action was performed
-        "message": message
-        "success": true/false
-    }
+    /**
+     * This method logs user out. It should never fail but for convenience it returns success flag and message with
+     * information
+     * @return
+     * {
+     *         "username": username on whom action was performed
+     *         "message"
+     *         "success": true/false
+     * }
      */
     @PostMapping("/user/logout")
     public UserReturn logout()
     {
         UserReturn ret = new UserReturn();
-            securityModel.Logout();
+        securityModel.Logout();
 
-            ret.message ="Successfully logged out";
-            ret.success = true;
-            return ret;
+        ret.message ="Successfully logged out";
+        ret.success = true;
+        return ret;
     }
 
-    /*
-    RETURNS JSON LIKE:
-    {
-        "username": username on whom action was performed
-        "role": username's role
-        "message": message
-        "success": true/false
-    }
+    /**
+     *  This method returns information about currently logged user. If this user is anonymousUser (default user
+     *  when no other user is logged) then flag is set to false
+     * @return
+     * {
+     *         "username": username on whom action was performed
+     *         "role": shop/customer/null
+     *         "message"
+     *         "success": true/false
+     *}
      */
     @PostMapping({"/welcome","/"})
     public UserReturn welcome() {

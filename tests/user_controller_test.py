@@ -1,32 +1,7 @@
 import requests
 import json
 import psycopg2
-
-HTTP_OK = 200
-HTTP_FORBIDDEN = 403
-HTTP_NOT_FOUND = 404
-REGISTER_URL = 'http://localhost:8080/api/register'
-WELCOME_URL = 'http://localhost:8080/api/welcome'
-LOGOUT_URL = 'http://localhost:8080/api/user/logout'
-LOGIN_URL = 'http://localhost:8080/api/login'
-
-USER_ONLY_URL = 'http://localhost:8080/api/user/somerandompage'
-REGULAR_USER_ONLY_URL = "http://localhost:8080/api/user/customer/otherpage"
-SHOP_USER_ONLY_URL = "http://localhost:8080/api/user/store/yetanotherpage"
-FORBIDDEN_URL = "http://localhost:8080/api/somerandomstuff"
-
-
-
-def truncate_users():
-    conn = psycopg2.connect(dbname="vineon", user="postgres", password="postgres")
-    cursor = conn.cursor()
-    cursor.execute("DELETE FROM Users")
-    cursor.execute("ALTER SEQUENCE users_id_seq RESTART WITH 1")
-    cursor.execute("DELETE FROM Customer")
-    cursor.execute("DELETE FROM Store")
-    conn.commit()
-
-    return cursor
+from imports import *
 
 
 def send_post_request(url, session, expected_code, payload=None):
@@ -51,12 +26,12 @@ def test_basic_registration():
     username = "sampleUsername"
     role = "customer"
 
-    payload = {
+    payload = {"params": {
         "username": username,
         "password": "PASSWORD",
         "passwordConfirm": "PASSWORD",
         "role": role
-    }
+    }}
 
     resp_body = send_post_request(REGISTER_URL, session, HTTP_OK, payload)
 
@@ -79,12 +54,12 @@ def test_basic_registration():
     assert count == 1
 
     # invalid credentials username
-    payload = {
+    payload = {"params": {
         "username": "short",
         "password": "PASSWORD",
         "passwordConfirm": "PASSWORD",
         "role": role
-    }
+    }}
     resp_body = send_post_request(REGISTER_URL, session, HTTP_OK, payload)
 
     assert resp_body['success'] is False
@@ -110,12 +85,12 @@ def test_registration_logout_and_login():
 
     username = "sampleUsername"
     role = "customer"
-    register_payload = {
+    register_payload = {"params": {
         "username": username,
         "password": "PASSWORD",
         "passwordConfirm": "PASSWORD",
         "role": role
-    }
+    }}
 
     send_post_request(REGISTER_URL, session, HTTP_OK, register_payload)
 
@@ -131,10 +106,10 @@ def test_registration_logout_and_login():
     welcome_resp = send_post_request(WELCOME_URL, session, HTTP_OK)
     assert welcome_resp['success'] is False
 
-    login_payload = {
+    login_payload = {"params": {
         "username": username,
         "password": "PASSWORD"
-    }
+    }}
 
     login_resp = send_post_request(LOGIN_URL, session, HTTP_OK, login_payload)
 
@@ -153,21 +128,22 @@ def test_user_permissions():
     cursor = truncate_users()
     session = requests.session()
 
-    register_payload = {
+    register_payload = {"params": {
         "username": "regularUser",
         "password": "PASSWORD",
         "passwordConfirm": "PASSWORD",
         "role": "customer"
-    }
+    }}
     send_post_request(REGISTER_URL, session, HTTP_OK, register_payload)
     send_post_request(LOGOUT_URL, session, HTTP_OK)
 
-    register_payload = {
+    register_payload = {"params": {
         "username": "shopUser",
         "password": "PASSWORD",
         "passwordConfirm": "PASSWORD",
         "role": "store"
-    }
+    }}
+
     send_post_request(REGISTER_URL, session, HTTP_OK, register_payload)
     send_post_request(LOGOUT_URL, session, HTTP_OK)
 
@@ -179,10 +155,10 @@ def test_user_permissions():
     send_post_request(REGULAR_USER_ONLY_URL, session, HTTP_FORBIDDEN)
     send_post_request(SHOP_USER_ONLY_URL, session, HTTP_FORBIDDEN)
 
-    shop_login_payload = {
+    shop_login_payload = {"params": {
         "username": "shopUser",
         "password": "PASSWORD"
-    }
+    }}
 
     send_post_request(LOGIN_URL, session, HTTP_OK, shop_login_payload)
     send_post_request(USER_ONLY_URL, session, HTTP_NOT_FOUND)
@@ -190,10 +166,10 @@ def test_user_permissions():
     send_post_request(SHOP_USER_ONLY_URL, session, HTTP_NOT_FOUND)
     send_post_request(LOGOUT_URL, session, HTTP_OK)
 
-    regular_login_payload = {
+    regular_login_payload = {"params": {
         "username": "regularUser",
         "password": "PASSWORD"
-    }
+    }}
 
     send_post_request(LOGIN_URL, session, HTTP_OK, regular_login_payload)
     send_post_request(USER_ONLY_URL, session, HTTP_NOT_FOUND)
@@ -201,9 +177,5 @@ def test_user_permissions():
     send_post_request(SHOP_USER_ONLY_URL, session, HTTP_FORBIDDEN)
     send_post_request(LOGOUT_URL, session, HTTP_OK)
 
-    send_post_request(FORBIDDEN_URL,session,HTTP_FORBIDDEN)
+    send_post_request(FORBIDDEN_URL, session, HTTP_FORBIDDEN)
     truncate_users()
-
-
-
-test_basic_registration()

@@ -44,16 +44,16 @@ CREATE TABLE IF NOT EXISTS WINES(
 CREATE TABLE IF NOT EXISTS STORE_GRADES(
   id                 SERIAL PRIMARY KEY,
   store_id           INT,
-  users_id           INT,
-  rating             INT,
+  user_id           INT,
+  grade              INT,
   description        TEXT
 );
 
 CREATE TABLE IF NOT EXISTS WINE_GRADES(
   id                 SERIAL,
-  wines_id           INT,
-  users_id           INT,
-  rating             INT,
+  wine_id           INT,
+  user_id           INT,
+  grade              INT,
   description        TEXT
 );
 

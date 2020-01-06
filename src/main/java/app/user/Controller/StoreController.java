@@ -27,28 +27,26 @@ public class StoreController  {
         this.wineModel = wineModel;
     }
 
-    /*
-    EXPECTS JSON LIKE (ONLY FIELDS THAT NEED TO BE MODIFIED)
-
-    {
-    "address": value,
-    "city":  value,
-    "country": value,
-    "website": value,
-    }
-
-    RETURNS JSON LIKE
-    {
-    "storeName": value
-    "address": value,
-    "city":  value,
-    "country": value,
-    "website": value,
-    "success": true/false
-    }
-
+    /**
+     * This method modifies shop's profile with information given in profileJSON. It returns current state of profile
+     * if everything went OK or success = false if it did not
+     * @param profileJSON
+     *  {
+     *     "address",
+     *     "city",
+     *     "country",
+     *     "website",
+     *     }
+     * @return
+     *  {
+     *     "storeName"
+     *     "address",
+     *     "city",
+     *     "country",
+     *     "website",
+     *     "success": true/false
+     *     }
      */
-
     @PostMapping("/user/store/update")
     public StoreReturn UpdateProfile(@RequestBody String profileJSON)
     {
@@ -89,27 +87,28 @@ public class StoreController  {
     }
 
 
-    /*
-    EXPECTS JSON LIKE
-    {
-        'city' : city
-    }
 
-    RETURNS JSON LIKE
-
-    [
-        {
-        "storeName": value
-        "address": value,
-        "city":  value,
-        "country": value,
-        "website": value,
-        "success": true/false
-        }
-        ...
-
-    ]
-
+    /**
+     *  This method returns all shops of given city or empty list + success = false if something went wrong
+     * @param cityJSON
+     * {
+     *    'city'
+     * }
+     * @return
+     * stores: [
+     *         {
+     *         "storeName",
+     *         "address",
+     *         "city",
+     *         "country",
+     *         "website",
+     *         "success": true/false
+     *         },
+     *         {
+     *         ...
+     *
+     * ]
+     * success: true/false
      */
     @PostMapping("/user/storesofcity")
     public MultipleStoresReturn getStoresOfCity(@RequestBody String cityJSON)
@@ -144,19 +143,18 @@ public class StoreController  {
         return ret;
     }
 
-
-    /*
-    REQUESTS JSON LIKE
-    {
-    wineName: name of wine that already IS IN DATABASE
-    }
-
-    RETURNS JSON LIKE
-    {
-    success: true/false
-    message: some information
-    }
-
+    /**
+     *  This method adds wine that already exists in database into a shop. If wine's not in database or any other
+     *  problem occured it returns a message with description and success = false
+     * @param wineJSON
+     * {
+     *     wineName: name of wine that already IS IN DATABASE
+     * }
+     * @return
+     * {
+     *     success: true/false,
+     *     message:
+     *     }
      */
     @PostMapping("/user/store/addwine")
     public WineReturn addWine(@RequestBody String wineJSON)
@@ -190,20 +188,19 @@ public class StoreController  {
         }
     }
 
-
-    /*
-   REQUESTS JSON LIKE
-   {
-   wineName: name of wine that already IS IN DATABASE
-   }
-
-   RETURNS JSON LIKE
-   {
-   success: true/false
-   message: some information
-   }
-
-    */
+    /**
+     * This method removes wine from a shop. If wine could not be removed (that can happen because of few reasons)
+     * information about it is provided and success = false
+     * @param wineJSON
+     * {
+     *    wineName: name of wine that already IS IN DATABASE
+     * }
+     * @return
+     * {
+     *    success: true/false
+     *    message: some information
+     * }
+     */
     @PostMapping("/user/store/removewine")
     public WineReturn removeWine(@RequestBody String wineJSON)
     {
@@ -249,6 +246,22 @@ public class StoreController  {
     ]
     success:
 
+     */
+
+    /**
+     * This method returns all wines that are present in given store. If store cannot be found or any other errors occur
+     * empty list is returned and success = false
+     * @param storeJSON
+     * {
+     *     "storeName"
+     * }
+     * @return
+     * {
+     *      wines: [
+     *      ...
+     *      ]
+     *      success: true/false
+     * }
      */
     @PostMapping("/user/winesofstore")
     public MultipleWinesReturn winesOfStore(@RequestBody String storeJSON)
@@ -297,6 +310,16 @@ public class StoreController  {
 
     }
 
+    /**
+     *
+     * @param wineJSON
+     * {
+     *     "wineName"
+     * }
+     * @return Wine object got from database
+     * @throws JSONException if no field "wineName" in JSON or Exception when we try to access wine that is not present
+     * in the database
+     */
     private Wine getWineFromJSON(String wineJSON) throws Exception
     {
         JSONObject jsonObject = JSONGetter.getParams(wineJSON);
