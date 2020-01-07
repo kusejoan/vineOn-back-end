@@ -21,6 +21,8 @@ ADD_WINE_URL = 'http://localhost:8080/api/user/addwine'
 RATE_WINE_URL = 'http://localhost:8080/api/user/customer/ratewine'
 AVG_RATE_URL = 'http://localhost:8080/api/user/averagerating'
 
+FOLLOW_URL = 'http://localhost:8080/api/user/follow'
+
 
 def send_post_request(url, session, expected_code, payload=None):
     resp = session.post(url, data=json.dumps(payload, indent=4))
@@ -47,6 +49,7 @@ def truncate_wines():
     conn.commit()
     return cursor
 
+
 def truncate_grades():
     conn = psycopg2.connect(dbname="vineon", user="postgres", password="postgres")
     cursor = conn.cursor()
@@ -54,6 +57,16 @@ def truncate_grades():
     cursor.execute("ALTER SEQUENCE wine_grades_id_seq RESTART WITH 1")
     conn.commit()
     return cursor
+
+
+def truncate_follows():
+    conn = psycopg2.connect(dbname="vineon", user="postgres", password="postgres")
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM followers")
+    cursor.execute("ALTER SEQUENCE followers_id_seq RESTART WITH 1")
+    conn.commit()
+    return cursor
+
 
 def register(s, username, role):
     register_payload = {"params": {

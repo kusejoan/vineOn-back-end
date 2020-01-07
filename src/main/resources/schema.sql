@@ -69,3 +69,9 @@ CREATE TABLE IF NOT EXISTS USERS_WINES(
   wines_id               INT
 );
 
+CREATE TABLE IF NOT EXISTS FOLLOWERS(
+    id         SERIAL PRIMARY KEY,
+    follower_id        INT,
+    following_id        INT
+)
+
