@@ -1,10 +1,11 @@
 package app.user.Controller;
 
-import app.user.Controller.helpers.JSONGetter;
-import app.user.Controller.helpers.UserReturn;
+import app.user.Controller.helpers.*;
 import app.user.Entity.*;
 import app.user.Model.RoleModel;
 import app.user.Model.SecurityModel;
+import app.user.Model.User.CustomerModel;
+import app.user.Model.User.StoreModel;
 import app.user.Model.User.UserModel;
 import app.user.validator.UserValidator;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
@@ -18,17 +19,21 @@ import org.springframework.web.bind.annotation.*;
 public class UserController
 {
     public UserController(UserModel userModelImpl, SecurityModel securityModel,
-                          UserValidator userValidator, RoleModel roleModel) {
+                          UserValidator userValidator, RoleModel roleModel, CustomerModel customerModel, StoreModel storeModel) {
         this.userModel = userModelImpl;
         this.securityModel = securityModel;
         this.userValidator = userValidator;
         this.roleModel = roleModel;
+        this.customerModel = customerModel;
+        this.storeModel = storeModel;
     }
 
     private UserModel userModel;
     private SecurityModel securityModel;
     private UserValidator userValidator;
     private RoleModel roleModel;
+    private CustomerModel customerModel;
+    private StoreModel storeModel;
 
 
     /**
@@ -200,4 +205,53 @@ public class UserController
         }
         return ret;
     }
+
+
+    /**
+     * This method modifies customer's profile with information given in profileJSON. It returns current state of profile
+     * if everything went OK or success = false if it did not
+     * @param profileJSON
+     * {
+     *     firstName,
+     *     surname,
+     *     birthdate,
+     * }
+     * @return
+     * {
+     *     username,
+     *     firstName,
+     *     surname,
+     *     birthdate
+     * }
+     */
+
+    @PostMapping("/user/customer/update")
+    public CustomerReturn update(@RequestBody String profileJSON)
+    {
+        String name = securityModel.findLoggedInUsername();
+        Customer profile = customerModel.findByUsername(name);
+        try {
+
+            JSONObject jsonObject = JSONGetter.getParams(profileJSON);
+            if(jsonObject.has("firstName"))
+            {
+                profile.setFirstName(jsonObject.getString("firstName"));
+            }
+            if(jsonObject.has("surname"))
+            {
+                profile.setSurname(jsonObject.getString("surname"));
+            }
+            if(jsonObject.has("birthdate"))
+            {
+                profile.setBirthdate(jsonObject.getString("birthdate"));
+            }
+            customerModel.save(profile);
+            return new CustomerReturn(profile);
+        }
+        catch (Exception e)
+        {
+            return new CustomerReturn();
+        }
+    }
+
 }

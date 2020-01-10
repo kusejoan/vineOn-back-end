@@ -2,28 +2,28 @@ package app.user.Controller.helpers;
 
 import app.user.Entity.Store;
 
-public class StoreReturn
+public class StoreReturn extends UserBaseReturn
 {
     public StoreReturn()
     {
-        success = false;
+        super(false);
     }
 
     public StoreReturn(Store store)
     {
+        super(true);
         storeName = store.getStoreName();
         address = store.getAddress();
         city = store.getCity();
         country = store.getCountry();
         website = store.getWebsite();
-        success = true;
     }
     public String storeName;
     public String address;
     public String city;
     public String country;
     public String website;
-    public boolean success;
+
 
     public String getStoreName() {
         return storeName;

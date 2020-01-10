@@ -13,20 +13,20 @@ public class Customer extends User{
         super(other);
     }
     @Column(name = "first_name")
-    private String first_name;
+    private String firstName;
 
     @Column(name = "surname")
     private String surname;
 
     @Column(name = "birth_date")
-    private String birth_date;
+    private String birthdate;
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getSurname() {
@@ -37,12 +37,12 @@ public class Customer extends User{
         this.surname = surname;
     }
 
-    public String getBirth_date() {
-        return birth_date;
+    public String getBirthdate() {
+        return birthdate;
     }
 
-    public void setBirth_date(String birth_date) {
-        this.birth_date = birth_date;
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
     }
 
     @Override
@@ -51,8 +51,8 @@ public class Customer extends User{
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Customer customer = (Customer) o;
-        return Objects.equals(first_name, customer.first_name) &&
+        return Objects.equals(firstName, customer.firstName) &&
                 Objects.equals(surname, customer.surname) &&
-                Objects.equals(birth_date, customer.birth_date);
+                Objects.equals(birthdate, customer.birthdate);
     }
 }

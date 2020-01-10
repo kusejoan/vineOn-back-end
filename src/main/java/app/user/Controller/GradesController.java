@@ -154,12 +154,7 @@ public class GradesController {
                 }
                 else
                 {
-                    double sum = 0;
-                    for(WineGrade g: grades)
-                    {
-                        sum += g.getGrade();
-                    }
-                    sum = sum/grades.size();
+                    double sum = wineGradeModel.averageGrade(grades);
 
                     ret.grade = sum;
                     ret.amountOfGrades = grades.size();

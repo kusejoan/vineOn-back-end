@@ -10,9 +10,10 @@ import java.util.Optional;
 public interface WineGradeModel {
     void save(WineGrade wineGrade);
 
+    List<WineGrade> findAll();
     List<WineGrade> findByWine(Wine wine);
-
     List<WineGrade> findByUser(User user);
-
     Optional<WineGrade> findByUserAndWine(User user, Wine wine);
+
+    double averageGrade(List<WineGrade> grades);
 }

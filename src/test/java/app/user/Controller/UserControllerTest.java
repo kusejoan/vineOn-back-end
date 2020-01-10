@@ -1,5 +1,7 @@
 package app.user.Controller;
 
+import app.user.Controller.helpers.CustomerReturn;
+import app.user.Controller.helpers.UserBaseReturn;
 import app.user.Controller.helpers.UserReturn;
 import app.user.Entity.Role;
 import app.user.Entity.Store;
@@ -7,6 +9,8 @@ import app.user.Entity.Customer;
 import app.user.Entity.User;
 import app.user.Model.RoleModel;
 import app.user.Model.SecurityModel;
+import app.user.Model.User.CustomerModel;
+import app.user.Model.User.StoreModel;
 import app.user.Model.User.UserModel;
 import app.user.validator.UserValidator;
 import org.junit.Test;
@@ -21,8 +25,10 @@ public class UserControllerTest {
     private SecurityModel securityModel = mock(SecurityModel.class);
     private UserValidator userValidator = new UserValidator(userModel);
     private RoleModel roleModel = mock(RoleModel.class);
+    private CustomerModel customerModel = mock(CustomerModel.class);
+    private StoreModel storeModel = mock(StoreModel.class);
 
-    private UserController userController = new UserController(userModel, securityModel, userValidator, roleModel);
+    private UserController userController = new UserController(userModel, securityModel, userValidator, roleModel, customerModel, storeModel);
 
 
     // REGISTRATION

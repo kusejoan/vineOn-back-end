@@ -23,6 +23,11 @@ public class WineGradeModelImpl implements WineGradeModel {
     }
 
     @Override
+    public List<WineGrade> findAll() {
+        return wineGradesRepository.findAll();
+    }
+
+    @Override
     public List<WineGrade> findByWine(Wine wine) {
         return wineGradesRepository.findByWine(wine);
     }
@@ -35,5 +40,21 @@ public class WineGradeModelImpl implements WineGradeModel {
     @Override
     public Optional<WineGrade> findByUserAndWine(User user, Wine wine) {
         return wineGradesRepository.findByUserAndWine(user,wine);
+    }
+
+    @Override
+    public double averageGrade(List<WineGrade> grades) {
+        double sum = 0;
+        if(grades.size()==0)
+        {
+            return -1;
+        }
+        for(WineGrade g: grades)
+        {
+            sum += g.getGrade();
+        }
+        sum = sum/grades.size();
+
+        return sum;
     }
 }
