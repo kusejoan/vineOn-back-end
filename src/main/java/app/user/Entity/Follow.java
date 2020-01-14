@@ -6,6 +6,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "FOLLOWERS")
 public class Follow {
+    public Follow() { }
 
     public Follow(User follower, User following) {
         this.follower = follower;

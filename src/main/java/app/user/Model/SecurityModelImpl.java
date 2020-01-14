@@ -6,6 +6,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import javax.servlet.http.HttpSession;
+
 public class SecurityModelImpl implements SecurityModel{
 
     public SecurityModelImpl(AuthenticationManager authenticationManager, UserDetailsService userDetailsService) {

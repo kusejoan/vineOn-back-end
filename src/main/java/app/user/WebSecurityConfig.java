@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -38,7 +39,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()).and()
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS).and()
+                .cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()).and()
                 .authorizeRequests()
                 .antMatchers("/api/user/customer/**").hasAuthority("customer")
                 .antMatchers("/api/user/store/**").hasAuthority("store")
@@ -47,7 +49,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/**").denyAll()
                 .anyRequest().permitAll()
                 .and()
-                .csrf().disable();
+                .csrf().disable()
+                .logout().logoutUrl("/api/user/logout").invalidateHttpSession(true).deleteCookies("JSESSIONID");
     }
 
     @Bean
