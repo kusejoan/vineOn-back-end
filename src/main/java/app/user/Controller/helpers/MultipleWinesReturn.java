@@ -9,6 +9,7 @@ public class MultipleWinesReturn {
 
     public MultipleWinesReturn(List<Wine> wines) {
         this.wines = wines;
+        this.success = true;
     }
 
     public List<Wine> wines;
