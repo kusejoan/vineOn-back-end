@@ -1,5 +1,6 @@
 package app.user.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -20,9 +21,11 @@ public class WineGrade {
     private Long id;
 
     @ManyToOne()
+    @JsonBackReference
     private User user;
 
     @ManyToOne()
+    @JsonBackReference
     private Wine wine;
 
     @Column(name = "grade")

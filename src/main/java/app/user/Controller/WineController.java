@@ -119,6 +119,13 @@ public class WineController {
     status:
 
      */
+
+    /**
+     * Ta funkcja zwraca wszystkie sklepy, w których znajdziemy wino, którego nazwa jest przesłana w zapytaniu.
+     * Jeśli wino o danej nazwie nie istnieje, zwracana jest pusta lista oraz flaga success = false
+     * @param wineJSON
+     * @return
+     */
     @PostMapping("/user/storesofwine")
     public MultipleStoresReturn getStoresOfWine(@RequestBody String wineJSON)
     {

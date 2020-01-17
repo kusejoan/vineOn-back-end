@@ -6,8 +6,10 @@ import app.user.Entity.Wine;
 import app.user.Model.SecurityModel;
 import app.user.Model.User.StoreModel;
 import app.user.Model.WineModel;
+import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -308,6 +310,40 @@ public class StoreController  {
             return ret;
         }
 
+    }
+
+    @PostMapping("/user/store/importcsv")
+    public MultipleWinesReturn importCSV(@RequestBody String imported)
+    {
+        String username = securityModel.findLoggedInUsername();
+        Store store = storeModel.findByUsername(username);
+        try {
+            JSONObject json = JSONGetter.getParamsCSV(imported);
+            JSONArray array = json.getJSONArray("wines");
+
+            for(int i = 0; i<array.length(); i++)
+            {
+                JSONObject wine = array.getJSONObject(i);
+
+                String wineName = wine.getString("wineName");
+                if(wineModel.findByName(wineName).isPresent())
+                {
+                    store.addWine(wineModel.findByName(wineName).get());
+                }
+                else
+                {
+                    String country = wine.getString("country");
+                    Long year = wine.getLong("year");
+                    String color = wine.getString("color");
+                    String type = wine.getString("type");
+                    Wine newWine = new Wine(wineName,country,year,color,type);
+                    wineModel.save(newWine);
+
+                    store.addWine(newWine);
+                }
+            }
+        } catch (Exception ex) {System.out.println(ex.getMessage());}
+        return null;
     }
 
     /**

@@ -2,12 +2,26 @@ package app.user.Entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "wines")
 public class Wine implements Serializable {
+    public Wine(String wineName, String country, Long year, String color, String type) {
+        this.wineName = wineName;
+        this.country = country;
+        this.year = year;
+        this.color = color;
+        this.type = type;
+        this.store = new HashSet<>();
+    }
+
+    public Wine() {
+        this.store = new HashSet<>();
+    }
+
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
