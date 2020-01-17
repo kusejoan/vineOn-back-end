@@ -16,7 +16,7 @@ public class WineModelTest {
     public void checkIfRightMethodsFromWineRepositoryAreCalled()
     {
         wineModel.findByName("NAME");
-        verify(wineRepository,times(1)).findByName("NAME");
+        verify(wineRepository,times(1)).findByWineName("NAME");
 
         Wine w = new Wine();
         wineModel.save(w);

@@ -29,7 +29,7 @@ public class StoreControllerTest {
         Store test = new Store();
         Wine testWine = new Wine();
         test.setStoreName(storeName);
-        testWine.setName(wineName);
+        testWine.setWineName(wineName);
         when(storeModel.findByUsername(anyString())).thenReturn(test);
         when(securityModel.findLoggedInUsername()).thenReturn("username");
         when(wineModel.findByName(anyString())).thenReturn(Optional.of(testWine));
@@ -51,7 +51,7 @@ public class StoreControllerTest {
         Store test = new Store();
         Wine testWine = new Wine();
         test.setStoreName(storeName);
-        testWine.setName(wineName);
+        testWine.setWineName(wineName);
         when(storeModel.findByUsername(anyString())).thenReturn(test);
         when(securityModel.findLoggedInUsername()).thenReturn("username");
         when(wineModel.findByName(anyString())).thenReturn(Optional.empty());
@@ -73,7 +73,7 @@ public class StoreControllerTest {
         Store test = new Store();
         Wine testWine = new Wine();
         test.setStoreName(storeName);
-        testWine.setName(wineName);
+        testWine.setWineName(wineName);
         when(storeModel.findByUsername(anyString())).thenReturn(test);
         when(securityModel.findLoggedInUsername()).thenReturn("username");
         when(wineModel.findByName(anyString())).thenReturn(Optional.of(testWine));
@@ -94,7 +94,7 @@ public class StoreControllerTest {
         Store test = new Store();
         Wine testWine = new Wine();
         test.setStoreName(storeName);
-        testWine.setName(wineName);
+        testWine.setWineName(wineName);
         test.addWine(testWine);
         when(storeModel.findByUsername(anyString())).thenReturn(test);
         when(securityModel.findLoggedInUsername()).thenReturn("username");

@@ -13,7 +13,7 @@ public class Wine implements Serializable {
     private Long id;
 
     @Column(name = "name")
-    private String name;
+    private String wineName;
 
     @Column(name = "country")
     private String country;
@@ -38,12 +38,12 @@ public class Wine implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getWineName() {
+        return wineName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setWineName(String wineName) {
+        this.wineName = wineName;
     }
 
     public String getCountry() {
@@ -92,7 +92,7 @@ public class Wine implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Wine wine = (Wine) o;
         return Objects.equals(id, wine.id) &&
-                Objects.equals(name, wine.name) &&
+                Objects.equals(wineName, wine.wineName) &&
                 Objects.equals(country, wine.country) &&
                 Objects.equals(year, wine.year) &&
                 Objects.equals(color, wine.color) &&

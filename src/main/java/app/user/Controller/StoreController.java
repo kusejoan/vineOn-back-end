@@ -171,12 +171,12 @@ public class StoreController  {
             if(result)
             {
                 ret.success = true;
-                ret.message = wine.getName()+" added to "+store.getStoreName();
+                ret.message = wine.getWineName()+" added to "+store.getStoreName();
             }
             else
             {
                 ret.success = false;
-                ret.message = "Couldn't add "+wine.getName()+" to "+store.getStoreName();
+                ret.message = "Couldn't add "+wine.getWineName()+" to "+store.getStoreName();
             }
             return ret;
         }
@@ -217,12 +217,12 @@ public class StoreController  {
             if(result)
             {
                 ret.success = true;
-                ret.message = wine.getName()+" removed from "+store.getStoreName();
+                ret.message = wine.getWineName()+" removed from "+store.getStoreName();
             }
             else
             {
                 ret.success = false;
-                ret.message = "Couldn't remove "+wine.getName()+" from "+store.getStoreName();
+                ret.message = "Couldn't remove "+wine.getWineName()+" from "+store.getStoreName();
             }
             return ret;
         }

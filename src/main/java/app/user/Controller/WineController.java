@@ -48,22 +48,22 @@ public class WineController {
         {
             JSONObject jsonObject = JSONGetter.getParams(wineJSON);
             Wine wine = new Wine();
-            wine.setName(jsonObject.getString("wineName"));
+            wine.setWineName(jsonObject.getString("wineName"));
             wine.setCountry(jsonObject.getString("country"));
             wine.setYear(jsonObject.getLong("year"));
             wine.setColor(jsonObject.getString("color"));
             wine.setType(jsonObject.getString("type"));
 
-            if(wineModel.findByName(wine.getName()).isPresent())
+            if(wineModel.findByName(wine.getWineName()).isPresent())
             {
                 ret.success = false;
-                ret.message = "Wine "+wine.getName()+" already is in database";
+                ret.message = "Wine "+wine.getWineName()+" already is in database";
                 return ret;
             }
             wineModel.save(wine);
 
             ret.success = true;
-            ret.message = "Wine "+wine.getName()+" added to database";
+            ret.message = "Wine "+wine.getWineName()+" added to database";
             return ret;
 
         }

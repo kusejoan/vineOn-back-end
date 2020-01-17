@@ -19,7 +19,7 @@ public class WineModelImpl implements WineModel {
 
     @Override
     public Optional<Wine> findByName(String name) {
-        return wineRepository.findByName(name);
+        return wineRepository.findByWineName(name);
     }
 
     @Override

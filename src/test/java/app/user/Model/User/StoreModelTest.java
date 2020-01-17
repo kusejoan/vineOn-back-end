@@ -2,8 +2,6 @@ package app.user.Model.User;
 
 import app.user.Entity.Store;
 import app.user.Entity.Wine;
-import app.user.Model.User.StoreModel;
-import app.user.Model.User.StoreModelImpl;
 import app.user.Repo.StoreRepository;
 import org.junit.Test;
 
@@ -43,10 +41,10 @@ public class StoreModelTest {
     {
         Store s = new Store();
         Wine w  = new Wine();
-        w.setName("ABC");
+        w.setWineName("ABC");
 
         Wine w2 = new Wine();
-        w.setName("CBA");
+        w.setWineName("CBA");
 
         storeModel.addWine(s,w);
         storeModel.addWine(s,w2);
