@@ -5,8 +5,10 @@ import app.user.Model.SecurityModelImpl;
 import app.user.Model.User.UserDetailsImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -20,7 +22,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer{
 
     public WebSecurityConfig(UserDetailsImpl userDetailsService) {
         this.userDetailsService = userDetailsService;
@@ -40,17 +42,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS).and()
-                .cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()).and()
                 .authorizeRequests()
                 .antMatchers("/api/user/customer/**").hasAuthority("customer")
                 .antMatchers("/api/user/store/**").hasAuthority("store")
                 .antMatchers("/api/user/**").authenticated()
-                .antMatchers("/api/resources/**", "/api/register", "/api/login", "/api/welcome","/api/").permitAll()
+                .antMatchers("/api/resources/**", "/api/register", "/api/login", "/api/welcome","/api/").permitAll().
+                antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
                 .antMatchers("/api/**").denyAll()
                 .anyRequest().permitAll()
                 .and()
-                .csrf().disable()
-                .logout().logoutUrl("/api/user/logout").invalidateHttpSession(true).deleteCookies("JSESSIONID");
+                .csrf().disable();
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**").allowedMethods("GET","POST","OPTIONS")
+                .allowedOrigins("http://localhost:3000").allowCredentials(true).allowedHeaders("content-type");
     }
 
     @Bean

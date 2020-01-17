@@ -20,9 +20,7 @@ public class SecurityModelImpl implements SecurityModel{
 
     @Override
     public String findLoggedInUsername() {
-        String userDetails = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        return userDetails;
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
     @Override

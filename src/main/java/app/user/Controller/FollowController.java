@@ -32,6 +32,20 @@ public class FollowController {
         this.wineGradeModel = wineGradeModel;
     }
 
+    /**
+     * Ta metoda służy do dodawania użytkownika do listy obserwowanych. Jeżeli szukany użytkownik nie istnieje, bądź próbujemy
+     * obserwować samych siebie zwracany jest stosowny komunikat oraz flaga success ustawiana jest na false.
+     * @param followJSON
+     * {
+     *     username:
+     * }
+     * @return
+     * {
+     *     success: true/false
+     *     message:
+     * }
+     */
+
     @PostMapping("/user/follow")
     public FollowReturn follow(@RequestBody String followJSON)
     {
@@ -66,6 +80,20 @@ public class FollowController {
 
     }
 
+    /**
+     * Ta metoda służy do usuwania użytkownika do listy obserwowanych. Jeżeli szukany użytkownik nie istnieje, nie jest
+     * przez nas obserwowany bądź próbujemy obserwować samych siebie zwracany jest stosowny komunikat
+     * oraz flaga success ustawiana jest na false.
+     * @param unfollowJSON
+     * {
+     *     username:
+     * }
+     * @return
+     * {
+     *     success: true/false
+     *     message:
+     * }
+     */
     @PostMapping("/user/unfollow")
     public FollowReturn unfollow(@RequestBody String unfollowJSON)
     {
@@ -96,14 +124,64 @@ public class FollowController {
         return ret;
     }
 
+    /**
+     * Ta metoda zwraca listę rekomendowanych dla użytkownika win bazując na ocenach innych użytkowników oraz na kryteriach,
+     * które zostały przesłane jako parametry. Każdy z parametrów zapytania jest opcjonalny i gdy go nie wyślemy to wykonuje
+     * się ono dla wartości domyślnych czyli wyświetla 3 rekomendacje na podstawie wszystkich dostępnych ocen wszystkich win.
+     * Parametryzować można ilość wyników, to czy brać pod uwagę tylko oceny osób obserwowanych oraz kolor wina i kraj pochodzenia.
+     * Jeżeli żadne wina nie spełniają kryteriów, zwracana jest stosowna informacja
+     * @param wineJSON
+     * {
+     *     onlyFollowed: true/false
+     *     limit:
+     *     color:
+     *     country:
+     * }
+     * @return
+     * {
+     *     wines: [
+     *            ...
+     *            ]
+     *     success: true/false
+     * }
+     */
+
     @PostMapping("/user/customer/recommendations")
     public MultipleWinesReturn Recommendations(@RequestBody String wineJSON)
     {
         MultipleWinesReturn ret = new MultipleWinesReturn();
         User me = userModel.findByUsername(securityModel.findLoggedInUsername());
         boolean onlyFollowed = false;
-        int limit = 2;
+        int limit = 3;
+        String color = null;
+        String country = null;
 
+        try
+        {
+            JSONObject json = JSONGetter.getParams(wineJSON);
+            if(json.has("limit"))
+            {
+                limit = json.getInt("limit");
+            }
+            if(json.has("onlyFollowed"))
+            {
+                onlyFollowed = json.getBoolean("onlyFollowed");
+            }
+            if(json.has("color"))
+            {
+                color = json.getString("color");
+            }
+            if(json.has("country"))
+            {
+                country = json.getString("country");
+            }
+        }
+        catch (Exception ex)
+        {
+            ret.setSuccess(false);
+            ret.setMessage(ex.getMessage());
+            return ret;
+        }
         //JSON PARAMS
 
 
@@ -129,7 +207,11 @@ public class FollowController {
 
         for(WineGrade grade: grades)
         {
-            uniqueWines.add(grade.getWine());
+            if((grade.getWine().getColor().equals(color) || color == null) &&
+               (grade.getWine().getCountry().equals(color) || country == null))
+            {
+                uniqueWines.add(grade.getWine());
+            }
         }
         int numberOfWines = uniqueWines.size();
         if(0==numberOfWines)

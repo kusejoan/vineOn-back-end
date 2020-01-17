@@ -64,6 +64,7 @@ public class UserController
     @PostMapping("/register")
     public UserReturn registration(@RequestBody String userJson) {
 
+        System.out.println(userJson);
         User userForm = new User();
         UserReturn ret = new UserReturn();
         try {
@@ -231,6 +232,7 @@ public class UserController
     @PostMapping("/user/customer/update")
     public CustomerReturn update(@RequestBody String profileJSON)
     {
+        System.out.println(profileJSON);
         String name = securityModel.findLoggedInUsername();
         Customer profile = customerModel.findByUsername(name);
         try {
