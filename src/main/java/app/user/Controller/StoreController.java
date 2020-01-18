@@ -312,6 +312,25 @@ public class StoreController  {
 
     }
 
+    /**
+     * Ta metoda służy do wgrywania seryjnie win przez sklep. Sprawdzane jest po kolei każde wino z wysłanej listy.
+     * Jeżeli istnieje ono w bazie, jest tylko dodawanie do magazynu sklepu. Jeśli zaś nie istnieje, to najpierw musi
+     * zostać dodane do bazy, a dopiero potem jest dodawane do sklepu.
+     * @param imported
+     * {
+     *     wstępnie sparsowany plik .csv zawierający kolumny wineName, country, year, color oraz type
+     * }
+     * @return
+     * {
+     * wines:
+     *    [
+     *    {wineName, country, year, color, type},
+     *     ...
+     *    ]
+     *    success: true/false
+     *    message: how many wines were added
+     * }
+     */
     @PostMapping("/user/store/importcsv")
     public MultipleWinesReturn importCSV(@RequestBody String imported)
     {

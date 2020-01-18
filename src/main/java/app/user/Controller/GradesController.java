@@ -31,8 +31,9 @@ public class GradesController {
     private WineGradeModel wineGradeModel;
 
     /**
-     * This method adds a rating for a wine if it exists in database and returns info whether rating was properly
-     * added or not and what was the cause
+     * Ta metoda dodaje ocenę dla istniejącego w bazie danych wina oraz zwraca informację czy została ona dodana
+     * poprawnie czy nie, oraz dlaczego. Dodanie oceny drugi raz dla tego samego wina przez tego samego użytkownika
+     * powoduje nadpisanie poprzedniej oceny
      * @param jsonRating {wineName: , grade: , description: }
      * @return {success: true/false, message: }
      */
@@ -88,8 +89,8 @@ public class GradesController {
     }
 
     /**
-     * This method returns list of all ratings for given wine if it exists. If some errors occur on the way it returns
-     * info about it.
+     * Ta metoda zwraca listę wszystkich ocen danego wina o ile istnieje ono w bazie danych. Jeżeli wystąpią jakieś
+     * błędy to zwracana jest stosowana informacja
      * @param jsonRating {wineName}
      * @return { grades: [{id, user, wine, grade, description},{...}], success: true/false }
      */
@@ -123,8 +124,8 @@ public class GradesController {
     }
 
     /**
-     * This method calculates average grade for given wine. If it does not exist or has no grades
-     * information about it is returned
+     * Ta metoda oblicza średnią ocenę danego wina, na podstawie wszystkich jego ocen. Jeśli wino nie istnieje,
+     * albo nie było ocenione zwracana jest stosowna informacja
      * @param jsonRating {wineName}
      * @return {grade, amountOfGrades, success: True/False, message}
      */

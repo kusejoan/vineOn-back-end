@@ -258,6 +258,19 @@ public class UserController
             return new CustomerReturn();
         }
     }
+
+    /**
+     * Ta metoda pobiera z bazy danych wszystkich użytkowników, a następnie zwraca listę wypełnioną ich danymi
+     * @return
+     * {
+     *     users:
+     *     [
+     *      {username, role}
+     *      ...
+     *     ]
+     *     success
+     * }
+     */
     @PostMapping("/user/getallusers")
     public MultipleUsersReturn getAllUsers()
     {

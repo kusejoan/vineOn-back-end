@@ -23,23 +23,22 @@ public class WineController {
         this.wineModel = wineModel;
     }
 
-    /*
-    REQUESTS JSON LIKE
-   {
-   "wineName": name of wine
-   "country":
-   "year":
-   "color"
-   "type"
-
-   }
-
-   RETURNS JSON LIKE
-   {
-   success: true/false
-   message: some information
-   }
-
+    /**
+     * Ta metoda służy do dodawania wina do bazy danych. Jeżeli wino o podanej nazwie już istnieje w bazie, bądź pojawią
+     * się jakiekolwiek inne błędy to zostanie zwrócona odpowiednia informacja oraz flaga success = false
+     * @param wineJSON
+     * {
+     *    "wineName"
+     *    "country"
+     *    "year":
+     *    "color"
+     *    "type"
+     *    }
+     * @return
+     * {
+     *    success: true/false
+     *    message
+     *    }
      */
     @PostMapping("/user/addwine")
     public WineReturn add(@RequestBody String wineJSON)
@@ -76,12 +75,18 @@ public class WineController {
         }
     }
 
-    /*
-    REQUESTS NOTHING
 
-
-    RETURNS LIST OF WINES
-
+    /**
+     * Ta metoda zwraca wszystkie wina, które znajdują się aktualnie w bazie danych
+     * @return
+     * {
+     *     wines:
+     *     [
+     *     {wineName, country, year, color, type},
+     *     ...
+     *     ]
+     *     success: true/false
+     * }
      */
     @PostMapping("/user/getAllWines")
     public MultipleWinesReturn getAllWines()
@@ -97,35 +102,27 @@ public class WineController {
         return new MultipleWinesReturn(wines);
     }
 
-    /*
-    REQUESTS JSON LIKE
-    {
-    "wineName": wineName
-    }
-
-    RETURNS JSON LIKE
-
-   wines: [
-        {
-        "storeName": value
-        "address": value,
-        "city":  value,
-        "country": value,
-        "website": value,
-        "success": true/false
-        }
-        ...
-
-    ]
-    status:
-
-     */
-
     /**
      * Ta funkcja zwraca wszystkie sklepy, w których znajdziemy wino, którego nazwa jest przesłana w zapytaniu.
      * Jeśli wino o danej nazwie nie istnieje, zwracana jest pusta lista oraz flaga success = false
      * @param wineJSON
+     * {
+     *     "wineName"
+     * }
      * @return
+     * stores:
+     * [
+     *         {
+     *         "storeName"
+     *         "address"
+     *         "city"
+     *         "country"
+     *         "website"
+     *         "success": true/false
+     *         }
+     *         ...
+     * ]
+     *     success:
      */
     @PostMapping("/user/storesofwine")
     public MultipleStoresReturn getStoresOfWine(@RequestBody String wineJSON)
@@ -174,6 +171,29 @@ public class WineController {
         }
     }
 
+    /**
+     * Ta metoda służy do wyszukiwania win znajdujących się w bazie danych. Wino możemy wyszukać albo po jego nazwie,
+     * wtedy zwracane jest albo jedno wino albo informacja że nie znaleziono takiego wina. Drugą opcją jest wyszukiwanie
+     * na podstawie koloru oraz rodzaju wina i wtedy zwracana zostaje lista wszystkich win, które spełniają kryteria.
+     * @param jsonSearch
+     * {
+     *     wineName
+     * }
+     * lub
+     * {
+     *     color,
+     *     type
+     * }
+     * @return
+     *  {
+     *     wines:
+     *     [
+     *     {wineName, country, year, color, type},
+     *       ...
+     *      ]
+     *     success: true/false
+     *      }
+     */
     @PostMapping("user/searchwine")
     public MultipleWinesReturn searchWine(@RequestBody String jsonSearch)
     {
