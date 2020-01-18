@@ -16,6 +16,7 @@ public class CustomerReturn extends UserBaseReturn{
         firstName = c.getFirstName();
         surname = c.getSurname();
         birthdate = c.getBirthdate();
+        success = true;
     }
 
     public CustomerReturn() {
