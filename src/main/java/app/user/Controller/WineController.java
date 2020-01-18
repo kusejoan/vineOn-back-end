@@ -214,7 +214,7 @@ public class WineController {
                 else
                 {
                     ret.wines = null;
-                    ret.success = false;
+                    ret.success = true;
                     ret.message = "No wines found";
                 }
             }
