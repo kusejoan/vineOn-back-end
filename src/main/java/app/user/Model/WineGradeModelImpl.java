@@ -64,6 +64,11 @@ public class WineGradeModelImpl implements WineGradeModel {
         return wineGradesRepository.findByUserAndWine(user,wine);
     }
 
+    /**
+     *
+     * @param grades Lista ocen z których ma zostać wyliczona średnia
+     * @return Jeżeli nie ma ocen, zwracana jest wartość -1, w przeciwnym razie średnia arytmetyczna wszystkich ocen z listy
+     */
     @Override
     public double averageGrade(List<WineGrade> grades) {
         double sum = 0;

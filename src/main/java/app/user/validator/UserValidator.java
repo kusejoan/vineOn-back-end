@@ -45,6 +45,11 @@ public class UserValidator implements Validator {
         return User.class.equals(aClass);
     }
 
+    /**
+     *
+     * @param o User, którego dane chcemy zwalidować
+     * @param errors W tym obiekcie zostaną zapisane informacje o wszystkich błędach jakie wystapiły podczas walidacji
+     */
     @Override
     public void validate(Object o, Errors errors) {
         User user = (User) o;

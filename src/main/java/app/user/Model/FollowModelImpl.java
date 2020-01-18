@@ -38,6 +38,13 @@ public class FollowModelImpl implements FollowModel {
     }
 
     private FollowRepository followRepository;
+
+    /**
+     * Ta metoda przyjmuje jako parametr użytkownika przekazanego przez kontroler i dla tego użykownika zwraca listę
+     * wszystkich użytkowników którzy go obserwują
+     * @param user użytkownik dla którego wykonana będzie operacja
+     * @return lista wszystkich użytkowników którzy obserwują użytkownika user
+     */
     @Override
     public List<User> getAllFollowers(User user) {
         List<Follow> l = followRepository.findByFollowing(user);
@@ -50,6 +57,12 @@ public class FollowModelImpl implements FollowModel {
         return ret;
     }
 
+    /**
+     * Ta metoda przyjmuje jako parametr użytkownika przekazanego przez kontroler i dla tego użykownika zwraca listę
+     * wszystkich użytkowników których on obserwuje
+     * @param user użytkownik dla którego wykonana będzie operacja
+     * @return lista wszystkich użytkowników którzy są obserwowani przez użytkownika
+     */
     @Override
     public List<User> getAllFollowedBy(User user) {
         List<Follow> l = followRepository.findByFollower(user);
@@ -62,6 +75,13 @@ public class FollowModelImpl implements FollowModel {
         return ret;
     }
 
+    /**
+     * Ta metoda przyjmuje jako parametr użytkownika przekazanego przez kontroler i dla tego użykownika zwraca listę
+     * wszystkich użytkowników danego typu (sklep/klient) których on obserwuje
+     * @param user użytkownik dla którego wykonana będzie operacja
+     * @param type Customer.class lub Store.class
+     * @return lista wszystkich użytkowników danego typu którzy są obserwowani przez użytkownika
+     */
     @Override
     public <T extends User> List<T> getAllUsersFollowedBy(User user, Class<T> type) {
         List<User> all = getAllFollowedBy(user);
@@ -76,6 +96,15 @@ public class FollowModelImpl implements FollowModel {
         }
         return ret;
     }
+
+    /**
+     *
+     * @param follower User
+     * @param following User
+     * @return True jeżeli operacja zaobserwowania się udała i rekord został dodany do bazy danych, false
+     * gdy taki rekord już w bazie istnieje (użytkownik już obserwuje drugiego użytkownika)
+     * @throws Exception W przypadku, gdy próbujemy zaobserwować samych siebie wyrzucany jest wyjątek
+     */
 
     @Override
     public boolean follow(User follower, User following) throws Exception {
@@ -94,6 +123,14 @@ public class FollowModelImpl implements FollowModel {
             return true;
         }
     }
+    /**
+     *
+     * @param follower User
+     * @param following User
+     * @return True jeżeli operacja odobserwowania się udała i rekord został dodany do bazy danych, false
+     * gdy taki rekord już w bazie istnieje (użytkownik nie obserwuje drugiego użytkownika)
+     * @throws Exception W przypadku, gdy próbujemy odobserwować samych siebie wyrzucany jest wyjątek
+     */
     public boolean unfollow(User follower, User following) throws Exception
     {
         if(follower.equals(following))
