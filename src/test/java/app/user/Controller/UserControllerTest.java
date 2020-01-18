@@ -1,11 +1,32 @@
+/*
+ * Copyright (c) 2020.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met:
+ *  1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+ *  2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+ *  3. Neither the name of Vineon nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *  POSSIBILITY OF SUCH DAMAGE.
+ */
+
 package app.user.Controller;
 
-import app.user.Controller.helpers.CustomerReturn;
-import app.user.Controller.helpers.UserBaseReturn;
+import app.user.Controller.helpers.MultipleUsersReturn;
 import app.user.Controller.helpers.UserReturn;
+import app.user.Entity.Customer;
 import app.user.Entity.Role;
 import app.user.Entity.Store;
-import app.user.Entity.Customer;
 import app.user.Entity.User;
 import app.user.Model.RoleModel;
 import app.user.Model.SecurityModel;
@@ -14,8 +35,6 @@ import app.user.Model.User.StoreModel;
 import app.user.Model.User.UserModel;
 import app.user.validator.UserValidator;
 import org.junit.Test;
-
-
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -169,7 +188,29 @@ public class UserControllerTest {
         assertEquals(userReturn.message, "Successfully logged out");
     }
 
+    @Test
+    public void testGetAllUsers() {
+        // Setup
 
-    //WELCOME
+        // Run the test
+        final MultipleUsersReturn result = userController.getAllUsers();
+        verify(userModel,times(1)).findAll();
+        assertTrue(result.success);
+    }
 
+    @Test
+    public void testWelcome() {
+        // Setup
+
+        when(securityModel.findLoggedInUsername()).thenReturn("username");
+        when(userModel.findByUsername("username")).thenReturn(new User("username","pass","role"));
+        // Run the test
+        final UserReturn result = userController.welcome();
+
+        assertEquals(result.username,"username");
+        assertEquals(result.role,"role");
+
+
+        // Verify the results
+    }
 }
