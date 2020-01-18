@@ -23,6 +23,22 @@ public class WineModelImpl implements WineModel {
     }
 
     @Override
+    public List<Wine> findByColor(String color) {
+        return wineRepository.findByColor(color);
+    }
+
+    @Override
+    public List<Wine> findByType(String type) {
+        return wineRepository.findByType(type);
+    }
+
+
+    @Override
+    public List<Wine> findByColorAndType(String color, String type) {
+        return wineRepository.findByColorAndType(color,type);
+    }
+
+    @Override
     public void save(Wine wine)
     {
         wineRepository.save(wine);

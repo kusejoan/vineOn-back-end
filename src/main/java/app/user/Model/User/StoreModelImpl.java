@@ -17,7 +17,7 @@ public class StoreModelImpl implements StoreModel {
     }
 
     @Override
-    public List findAll() {
+    public List<Store> findAll() {
         return storeRepository.findAll();
     }
 

@@ -315,6 +315,7 @@ public class StoreController  {
     @PostMapping("/user/store/importcsv")
     public MultipleWinesReturn importCSV(@RequestBody String imported)
     {
+        MultipleWinesReturn ret = new MultipleWinesReturn();
         String username = securityModel.findLoggedInUsername();
         Store store = storeModel.findByUsername(username);
         try {
@@ -328,7 +329,11 @@ public class StoreController  {
                 String wineName = wine.getString("wineName");
                 if(wineModel.findByName(wineName).isPresent())
                 {
-                    store.addWine(wineModel.findByName(wineName).get());
+                    Wine tmp = wineModel.findByName(wineName).get();
+                    store.addWine(tmp);
+                    storeModel.save(store);
+                    tmp.setStore(null); //prevent infinite recursion
+                    ret.addWine(wineModel.findByName(wineName).get());
                 }
                 else
                 {
@@ -340,10 +345,19 @@ public class StoreController  {
                     wineModel.save(newWine);
 
                     store.addWine(newWine);
+                    ret.addWine(newWine);
                 }
             }
-        } catch (Exception ex) {System.out.println(ex.getMessage());}
-        return null;
+            ret.success = true;
+            ret.message = "Successfully exported "+array.length()+" wines from CSV";
+
+        } catch (Exception ex)
+        {
+            ret.message = ex.getMessage();
+            ret.success = false;
+        }
+
+        return ret;
     }
 
     /**

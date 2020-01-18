@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class MultipleStoresReturn {
-    private List<StoreReturn> stores;
-    private boolean success;
+    public List<StoreReturn> stores;
+    public boolean success;
 
     public MultipleStoresReturn() {
         this.stores = new ArrayList<>();

@@ -25,7 +25,7 @@ public class CustomerModelImpl implements CustomerModel {
     }
 
     @Override
-    public List findAll() {
+    public List<Customer> findAll() {
         return customerRepository.findAll();
     }
 }

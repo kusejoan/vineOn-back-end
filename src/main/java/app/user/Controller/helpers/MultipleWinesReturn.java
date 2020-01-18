@@ -2,10 +2,13 @@ package app.user.Controller.helpers;
 
 import app.user.Entity.Wine;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MultipleWinesReturn {
-    public MultipleWinesReturn() {}
+    public MultipleWinesReturn() {
+        this.wines = new ArrayList<>();
+    }
 
     public MultipleWinesReturn(List<Wine> wines) {
         this.wines = wines;
@@ -38,5 +41,10 @@ public class MultipleWinesReturn {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public void addWine(Wine wine)
+    {
+        wines.add(wine);
     }
 }

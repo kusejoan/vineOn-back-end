@@ -105,8 +105,7 @@ public class GradesController {
             if(wineModel.findByName(wineName).isPresent())
             {
                 Wine wine = wineModel.findByName(wineName).get();
-                ret.grades = wineGradeModel.findByWine(wine);
-                ret.success = true;
+                ret = new MultipleGradeReturn(wineGradeModel.findByWine(wine));
             }
             else
             {
@@ -147,7 +146,7 @@ public class GradesController {
                 if(grades.size()==0)
                 {
                     ret.amountOfGrades = 0;
-                    ret.grade = -1;
+                    ret.grade = 0;
                     ret.success = true;
                     ret.message = "No ratings yet";
                     return ret;

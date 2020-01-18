@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class WineController {
@@ -171,6 +172,75 @@ public class WineController {
             ret.setSuccess(false);
             return ret;
         }
+    }
+
+    @PostMapping("user/searchwine")
+    public MultipleWinesReturn searchWine(@RequestBody String jsonSearch)
+    {
+        MultipleWinesReturn ret = new MultipleWinesReturn();
+        try
+        {
+            JSONObject json = JSONGetter.getParams(jsonSearch);
+            if(json.has("wineName"))
+            {
+                String wineName = json.getString("wineName");
+                Optional<Wine> wine = wineModel.findByName(wineName);
+                if(wine.isPresent())
+                {
+                    ret.addWine(wine.get());
+                    ret.success = true;
+                    ret.message = "Found "+ret.wines.size()+" wine";
+                }
+                else
+                {
+                    ret.wines = null;
+                    ret.success = false;
+                    ret.message = "No wines found";
+                }
+            }
+            else
+            {
+                if(json.has("color") && json.has("type"))
+                {
+                    String color = json.getString("color");
+                    String type = json.getString("type");
+
+                    ret.wines = wineModel.findByColorAndType(color,type);
+                    ret.success = true;
+                    ret.message = "Found "+ret.wines.size()+" wines";
+                }
+                else if(json.has("color") && !json.has("type"))
+                {
+                    String color = json.getString("color");
+
+                    ret.wines = wineModel.findByColor(color);
+                    ret.success = true;
+                    ret.message = "Found "+ret.wines.size()+" wines";
+                }
+                else if(!json.has("color") && json.has("type"))
+                {
+                    String type = json.getString("type");
+
+                    ret.wines = wineModel.findByType(type);
+                    ret.success = true;
+                    ret.message = "Found "+ret.wines.size()+" wines";
+                }
+                else
+                {
+                    ret.wines = null;
+                    ret.success = false;
+                    ret.message = "No parameters were given";
+                }
+
+            }
+        }
+        catch (Exception ex)
+        {
+            ret.wines = null;
+            ret.success = false;
+            return ret;
+        }
+        return ret;
     }
 
 }

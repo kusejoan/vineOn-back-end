@@ -1,7 +1,17 @@
 package app.user.Controller.helpers;
 
+import app.user.Entity.User;
+
 public class UserReturn
 {
+    public UserReturn() {
+    }
+    public UserReturn(User u) {
+        username = u.getUsername();
+        role = u.getRole().getName();
+        success = true;
+    }
+
     public String username;
 
     public String role;

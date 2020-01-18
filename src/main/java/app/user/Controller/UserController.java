@@ -16,6 +16,8 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -255,6 +257,18 @@ public class UserController
         {
             return new CustomerReturn();
         }
+    }
+    @PostMapping("/user/getallusers")
+    public MultipleUsersReturn getAllUsers()
+    {
+        List<User> users = userModel.findAll();
+        List<UserReturn> tmp = new ArrayList<>();
+
+        for(User u: users)
+        {
+            tmp.add(new UserReturn(u));
+        }
+        return new MultipleUsersReturn(tmp);
     }
 
 }

@@ -30,7 +30,7 @@ public class UserModelImpl implements UserModel<User> {
     }
 
     @Override
-    public List findAll() {
+    public List<User> findAll() {
         return userRepository.findAll();
     }
 }

@@ -10,6 +10,6 @@ public interface UserModel<T extends User>{
 
     T findByUsername(String username);
 
-    List findAll();
+    List<T> findAll();
 
 }
