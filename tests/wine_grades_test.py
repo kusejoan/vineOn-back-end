@@ -166,7 +166,7 @@ def test_average_rating():
     # 4
     avg_resp = send_post_request(AVG_RATE_URL, s, HTTP_OK, average_rating_payload)
     assert avg_resp['success'] is True
-    assert avg_resp['grade'] == -1
+    assert avg_resp['grade'] == 0
     assert avg_resp['amountOfGrades'] == 0
     assert avg_resp['message'] == "No ratings yet"
     # 5

@@ -22,6 +22,7 @@ RATE_WINE_URL = 'http://localhost:8080/api/user/customer/ratewine'
 AVG_RATE_URL = 'http://localhost:8080/api/user/averagerating'
 
 FOLLOW_URL = 'http://localhost:8080/api/user/follow'
+UNFOLLOW_URL = 'http://localhost:8080/api/user/unfollow'
 RECOMMENDATION_URL = 'http://localhost:8080/api/user/customer/recommendations'
 
 

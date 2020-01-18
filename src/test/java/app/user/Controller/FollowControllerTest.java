@@ -87,6 +87,7 @@ public class FollowControllerTest {
         String followJSON = "{'params': {'username': \"username\"}}";
         // Run the test
         final FollowReturn result = followControllerUnderTest.follow(followJSON);
+        assertFalse(result.success);
 
         // Verify the results
     }
@@ -95,12 +96,13 @@ public class FollowControllerTest {
     public void testUnfollow() throws Exception {
         // Setup
         when(mockUserModel.findByUsername("username")).thenReturn(new User("username", "password", "role"));
-        when(mockSecurityModel.findLoggedInUsername()).thenReturn("result");
-        when(mockFollowModel.unfollow(new User("username", "password", "role"), new User("username", "password", "role"))).thenReturn(false);
+        when(mockSecurityModel.findLoggedInUsername()).thenReturn("username");
+        when(mockFollowModel.unfollow(new User("username", "password", "role"), new User("username", "password", "role"))).thenReturn(true);
 
         // Run the test
-        final FollowReturn result = followControllerUnderTest.unfollow("unfollowJSON");
-
+        String followJSON = "{'params': {'username': \"username\"}}";
+        final FollowReturn result = followControllerUnderTest.unfollow(followJSON);
+        assertTrue(result.success);
         // Verify the results
     }
 
@@ -138,7 +140,10 @@ public class FollowControllerTest {
         when(mockWineGradeModel.averageGrade(Arrays.asList(new WineGrade(new User("username", "password", "role"), new Wine("wineName", "country", 0L, "color", "type"), 0L, "description")))).thenReturn(0.0);
 
         // Run the test
-        final MultipleWinesReturn result = followControllerUnderTest.Recommendations("wineJSON");
+        String json = "{'params': {'limit': 3}}";
+        final MultipleWinesReturn result = followControllerUnderTest.Recommendations(json);
+        assertTrue(result.success);
+        assertEquals(result.wines.size(),1);
 
         // Verify the results
     }

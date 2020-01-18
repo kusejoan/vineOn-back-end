@@ -25,9 +25,21 @@ def test_basic_follow():
     resp = register(s, username, role)
     assert resp['success'] is True
 
-    payload = {'params': {'username': "sampleUsername"}}
+    username = "sampleUsername"
+    payload = {'params': {'username': username}}
     follow_resp = send_post_request(FOLLOW_URL, s, HTTP_OK, payload)
-    assert follow_resp == "ABC"
+    assert follow_resp['success'] is True
+    assert follow_resp['message'] == "You started following "+username
+    cursor.execute("SELECT COUNT (*) from followers")
+    count = cursor.fetchone()[0]
+    assert count == 1
+
+    unfollow_resp = send_post_request(UNFOLLOW_URL, s, HTTP_OK, payload)
+    assert unfollow_resp['success'] is True
+    assert unfollow_resp['message'] == "You stopped following " + username
+    cursor.execute("SELECT COUNT (*) from followers")
+    count = cursor.fetchone()[0]
+    assert count == 0
 
 
 def test_recommendations():
@@ -81,7 +93,10 @@ def test_recommendations():
     resp = register(s, username, role)
     assert resp['success'] is True
 
-    test_resp = send_post_request(RECOMMENDATION_URL, s, HTTP_OK)
-    assert  test_resp=="AB"
+    payload = {'params': {'onlyFollowing': "false"}}
+
+    test_resp = send_post_request(RECOMMENDATION_URL, s, HTTP_OK,payload)
+    assert test_resp['success'] is True
+    assert len(test_resp['wines']) == 3
 
 

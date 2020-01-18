@@ -127,13 +127,11 @@ public class GradesController {
 
             if(wineModel.findByName(wineName).isPresent())
             {
-                System.out.println(123);
                 Wine wine = wineModel.findByName(wineName).get();
                 ret = new MultipleGradeReturn(wineGradeModel.findByWine(wine));
             }
             else
             {
-                System.out.println(145);
                 ret.grades = null;
                 ret.success = false;
             }

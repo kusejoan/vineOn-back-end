@@ -82,14 +82,11 @@ public class FollowController {
             ret.success =  followModel.follow(follower,toFollow);
             if(ret.success)
             {
-                if(toFollow instanceof Store)
-                {
-                    ret.message = "You started following " + ((Store)toFollow).getStoreName();
-                }
+                    ret.message = "You started following "+ toFollow.getUsername();
             }
             else
             {
-                ret.message = "User "+toFollow+" does not exist";
+                ret.message = "User "+toFollow.getUsername()+" does not exist";
             }
         }
         catch (Exception ex)
@@ -123,7 +120,6 @@ public class FollowController {
         {
             JSONObject jsonObject = JSONGetter.getParams(unfollowJSON);
             String username = jsonObject.getString("username");
-            System.out.println(username);
             User toFollow = userModel.findByUsername(username);
             User follower = userModel.findByUsername(securityModel.findLoggedInUsername());
 
@@ -134,13 +130,13 @@ public class FollowController {
             }
             else
             {
-                ret.message = "User "+toFollow+" does not exist";
+                ret.message = "User "+toFollow.getUsername()+" does not exist";
             }
         }
         catch (Exception ex)
         {
             ret.message = ex.getMessage();
-            ret.success = false;ex.printStackTrace();
+            ret.success = false;
         }
         return ret;
     }
@@ -179,6 +175,7 @@ public class FollowController {
 
         try
         {
+
             JSONObject json = JSONGetter.getParams(wineJSON);
             if(json.has("limit"))
             {

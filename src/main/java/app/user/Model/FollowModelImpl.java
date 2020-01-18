@@ -135,16 +135,17 @@ public class FollowModelImpl implements FollowModel {
     {
         if(follower.equals(following))
         {
-            throw new Exception("You can't follow yourself");
+            throw new Exception("You can't unfollow yourself");
         }
         if(followRepository.findByFollowerAndFollowing(follower,following).isPresent())
         {
-            return false;
+            long count = followRepository.deleteByFollowerAndFollowing(follower,following);
+            return count == 1L;
+
         }
         else
         {
-            long count = followRepository.deleteByFollowerAndFollowing(follower,following);
-            return count == 1L;
+            return false;
         }
     }
 }
